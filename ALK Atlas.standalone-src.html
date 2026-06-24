@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#0A1628">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0A1628"/>
+    <rect x="500" y="290" width="200" height="200" rx="46" fill="#00A896"/>
+    <text x="600" y="460" font-family="Helvetica, Arial, sans-serif" font-size="150" font-weight="700" fill="#04201d" text-anchor="middle">A</text>
+    <text x="600" y="590" font-family="Helvetica, Arial, sans-serif" font-size="58" font-weight="700" fill="#ffffff" text-anchor="middle">ALK <tspan fill="#00A896">Atlas</tspan></text>
+  </svg>
+</template>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0A1628;--navy2:#13233b;--teal:#00A896;--teal-d:#018f80;--grey:#F5F6FA;--line:#E5E8F0;--ink:#1A2233;--mut:#697089}
+html,body{height:100%}
+body{font-family:'Public Sans',system-ui,sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+.root{height:100vh;overflow:hidden}
+.mono{font-family:'JetBrains Mono',monospace}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit;font-size:14px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#cfd4e2;border-radius:6px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:#b6bccf;background-clip:padding-box}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.fade{animation:fadeUp .35s ease both}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+.spin.dark{border:2px solid rgba(0,0,0,.12);border-top-color:var(--teal)}
+/* layout */
+.app{display:flex;height:100vh}
+.side{width:240px;background:var(--navy);color:#cdd5e4;display:flex;flex-direction:column;flex-shrink:0;transition:width .22s ease}
+.side.col{width:64px}
+.side-top{padding:18px 16px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07)}
+.logo{width:30px;height:30px;border-radius:7px;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#04201d;font-weight:700;font-size:15px;flex-shrink:0}
+.logo-tx{font-weight:700;color:#fff;font-size:15px;letter-spacing:.3px;white-space:nowrap}
+.logo-tx span{color:var(--teal)}
+.nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:3px;overflow-y:auto}
+.nav-i{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;color:#aab4c8;font-size:14px;font-weight:500;white-space:nowrap;transition:background .14s,color .14s;width:100%;text-align:left}
+.nav-i:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-i.on{background:var(--teal);color:#fff}
+.nav-i.on .ico{opacity:1}
+.ico{font-size:17px;width:20px;text-align:center;flex-shrink:0;opacity:.85}
+.side-bot{padding:14px 16px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:9px;font-size:12.5px;color:#9fb0c4;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.18);flex-shrink:0}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--grey)}
+.top{height:58px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 20px;flex-shrink:0;z-index:20}
+.crumb{flex:1;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut);min-width:0}
+.crumb b{color:var(--ink);font-weight:600}
+.crumb-sep{opacity:.5}
+.collapse{color:var(--mut);font-size:18px;width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.collapse:hover{background:var(--grey)}
+.scroll{flex:1;overflow-y:auto}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 32px 60px}
+/* user chip */
+.uchip{display:flex;align-items:center;gap:10px;padding:5px 8px 5px 5px;border-radius:30px;position:relative}
+.uchip:hover{background:var(--grey)}
+.av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0}
+.uchip .un{font-size:13.5px;font-weight:600;line-height:1.15}
+.uchip .ur{font-size:11.5px;color:var(--mut);line-height:1.15}
+.menu{position:absolute;top:48px;right:0;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 40px rgba(10,22,40,.16);width:230px;padding:7px;z-index:50;animation:fadeUp .15s ease both}
+.menu-h{padding:10px 12px 12px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.menu-i{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13.5px;color:var(--ink);width:100%;text-align:left;font-weight:500}
+.menu-i:hover{background:var(--grey)}
+.menu-i.dz{color:#DC2626}
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.bdot{width:6px;height:6px;border-radius:50%}
+.st-Approved{background:#E3F6EC;color:#108043}.st-Approved .bdot{background:#108043}
+.st-Under.Review{}
+.s-review{background:#FEF1DC;color:#B45309}.s-review .bdot{background:#D97706}
+.s-progress{background:#E4EDFE;color:#1D4ED8}.s-progress .bdot{background:#2563EB}
+.s-draft{background:#EDEFF4;color:#5B6477}.s-draft .bdot{background:#6B7280}
+.s-rejected{background:#FCE6E6;color:#B91C1C}.s-rejected .bdot{background:#DC2626}
+.s-approved{background:#E3F6EC;color:#0F8040}.s-approved .bdot{background:#16A34A}
+.ty{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;background:#EEF0F6;color:#4A5268;border:1px solid #e2e6f0}
+.ty.wetlab{background:#E7F5F3;color:#067a6e;border-color:#cdeae6}
+.ty.clinical{background:#EAEEFB;color:#3551b8;border-color:#d8e0f7}
+.ty.pcr{background:#F3EAFB;color:#7c3a9e;border-color:#e8d9f5}
+.ty.sample{background:#FCF1E6;color:#a35c12;border-color:#f4e1cc}
+.ty.document{background:#EEF0F6;color:#525a70;border-color:#e2e6f0}
+.ty.import{background:#E9F3EC;color:#3a7a4d;border-color:#d6ebdc}
+/* cards & generic */
+.card{background:#fff;border:1px solid var(--line);border-radius:14px}
+.h1{font-size:24px;font-weight:700;letter-spacing:-.3px}
+.h2{font-size:17px;font-weight:700}
+.sub{color:var(--mut);font-size:13.5px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 16px;border-radius:9px;font-size:13.5px;font-weight:600;transition:background .14s,border-color .14s,transform .05s}
+.btn:active{transform:translateY(1px)}
+.btn-p{background:var(--teal);color:#fff}.btn-p:hover{background:var(--teal-d)}
+.btn-d{background:var(--navy);color:#fff}.btn-d:hover{background:#1b3050}
+.btn-o{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn-o:hover{background:var(--grey)}
+.btn-g{background:transparent;color:var(--teal)}.btn-g:hover{background:#e6f6f4}
+.btn-sm{height:32px;padding:0 12px;font-size:12.5px;border-radius:8px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+/* stat cards */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.stat .lbl{font-size:12.5px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.stat .num{font-size:34px;font-weight:700;margin-top:6px;letter-spacing:-1px}
+.stat .ic{float:right;width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+/* table */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;padding:11px 14px;font-size:11.5px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+.tbl th:hover{color:var(--ink)}
+.tbl td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr{transition:background .12s}
+.tbl tbody tr:hover{background:#fafbfd}
+.rec-t{font-weight:600;color:var(--ink);cursor:pointer}
+.rec-t:hover{color:var(--teal)}
+.rec-id{font-size:11.5px;color:var(--mut);margin-top:2px}
+/* list row */
+.lrow{display:flex;align-items:center;gap:13px;padding:13px 8px;border-radius:10px;transition:background .12s;cursor:pointer}
+.lrow:hover{background:var(--grey)}
+/* forms */
+.field{margin-bottom:16px}
+.label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px;color:#39415a}
+.req{color:#DC2626;margin-left:2px}
+.input,select.input,textarea.input{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:14px;color:var(--ink);background:#fff;transition:border-color .14s,box-shadow .14s}
+.input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,168,150,.13)}
+textarea.input{resize:vertical;min-height:78px;line-height:1.5}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:20px;border:1px solid var(--line);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .12s;background:#fff}
+.chip:hover{border-color:#c7cddd}
+.chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.star{font-size:22px;cursor:pointer;color:#d4d8e4;transition:color .1s}
+.star.on{color:#F5A623}
+/* stepper */
+.steps{display:flex;align-items:center;gap:0}
+.step{display:flex;align-items:center;gap:10px;flex:1}
+.step .sn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;border:2px solid var(--line);color:var(--mut);background:#fff}
+.step.on .sn{background:var(--teal);border-color:var(--teal);color:#fff}
+.step.done .sn{background:#108043;border-color:#108043;color:#fff}
+.step .stx{font-size:12.5px;font-weight:600;color:var(--mut);white-space:nowrap}
+.step.on .stx,.step.done .stx{color:var(--ink)}
+.step .bar{flex:1;height:2px;background:var(--line);margin:0 10px}
+.step.done .bar{background:#108043}
+/* template cards */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tcard{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:20px;cursor:pointer;transition:all .15s;position:relative;text-align:left}
+.tcard:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(0,168,150,.1);transform:translateY(-2px)}
+.tcard.sel{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,168,150,.14)}
+.tcard.lock{opacity:.55;cursor:not-allowed;background:#fafbfd}
+.tcard.lock:hover{border-color:var(--line);box-shadow:none;transform:none}
+.tic{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:13px}
+.rec-link{color:var(--teal);font-weight:600;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:.92em}
+.rec-link:hover{text-decoration:underline}
+/* progress */
+.prog{height:7px;background:#eceef4;border-radius:10px;overflow:hidden}
+.prog>i{display:block;height:100%;background:var(--teal);border-radius:10px;transition:width .3s}
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(10,22,40,.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:200;animation:fadeUp .15s ease both;padding:20px}
+.modal{background:#fff;border-radius:16px;width:480px;max-width:100%;box-shadow:0 24px 70px rgba(0,0,0,.3);overflow:hidden}
+.modal-h{padding:20px 22px 14px}
+.modal-b{padding:0 22px 14px}
+.modal-f{padding:14px 22px;background:var(--grey);display:flex;justify-content:flex-end;gap:10px}
+/* toast */
+.toasts{position:fixed;bottom:22px;right:22px;display:flex;flex-direction:column;gap:10px;z-index:400}
+.toast{background:var(--navy);color:#fff;padding:13px 16px;border-radius:11px;font-size:13.5px;display:flex;align-items:center;gap:11px;box-shadow:0 12px 34px rgba(10,22,40,.32);animation:toastIn .25s ease both;min-width:260px;max-width:360px}
+.toast .ti{width:22px;height:22px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+/* timeline */
+.tl{position:relative;padding-left:4px}
+.tl-i{display:flex;gap:12px;padding-bottom:18px;position:relative}
+.tl-i:last-child{padding-bottom:0}
+.tl-i::before{content:'';position:absolute;left:6px;top:16px;bottom:-2px;width:2px;background:var(--line)}
+.tl-i:last-child::before{display:none}
+.tl-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:2px;border:3px solid #fff;box-shadow:0 0 0 1.5px currentColor;z-index:1}
+/* comments */
+.cmt{display:flex;gap:11px;padding:14px 0;border-bottom:1px solid var(--line)}
+.cmt:last-child{border-bottom:none}
+.cmt .cav{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px}
+/* chat */
+.chat-wrap{display:flex;gap:20px;height:100%}
+.chat-main{flex:1;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;min-width:0}
+.chat-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.chat-body{flex:1;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:18px}
+.msg{display:flex;gap:12px;max-width:80%;animation:fadeUp .3s ease both}
+.msg.u{align-self:flex-end;flex-direction:row-reverse}
+.msg .mav{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+.bub{padding:12px 15px;border-radius:13px;font-size:14px;line-height:1.6}
+.msg.b .bub{background:var(--grey);border-top-left-radius:4px}
+.msg.u .bub{background:var(--teal);color:#fff;border-top-right-radius:4px}
+.msg-act{display:flex;gap:4px;margin-top:7px}
+.msg-act button{width:26px;height:26px;border-radius:7px;color:var(--mut);font-size:12px;display:flex;align-items:center;justify-content:center}
+.msg-act button:hover{background:#e9ebf2;color:var(--ink)}
+.typing{display:flex;gap:4px;padding:14px 16px;background:var(--grey);border-radius:13px;border-top-left-radius:4px;width:fit-content}
+.typing i{width:7px;height:7px;border-radius:50%;background:#9aa3b8;animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+.chat-in{padding:14px 16px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:flex-end}
+.sugg{width:300px;flex-shrink:0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;align-self:flex-start;max-height:100%;overflow-y:auto}
+.sugg-q{padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--ink);cursor:pointer;margin-top:9px;transition:all .12s;line-height:1.4;font-weight:500}
+.sugg-q:hover{border-color:var(--teal);background:#f1fbf9;color:var(--teal-d)}
+.botlist{margin-top:9px;display:flex;flex-direction:column;gap:7px}
+.botrec{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 11px;cursor:pointer;transition:all .12s}
+.botrec:hover{border-color:var(--teal);background:#f7fdfc}
+/* search */
+.bigsearch{width:100%;height:58px;border:2px solid var(--line);border-radius:14px;padding:0 20px 0 50px;font-size:17px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%23697089' stroke-width='2'%3E%3Ccircle cx='9' cy='9' r='7'/%3E%3Cpath d='M14 14l5 5'/%3E%3C/svg%3E") no-repeat 18px center;transition:border-color .15s,box-shadow .15s}
+.bigsearch:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(0,168,150,.12)}
+.empty{text-align:center;padding:54px 20px;color:var(--mut)}
+.empty .eic{width:84px;height:84px;border-radius:18px;background:var(--grey);margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-size:34px}
+.ph{background:repeating-linear-gradient(45deg,#eef0f5,#eef0f5 9px,#e7eaf1 9px,#e7eaf1 18px);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+.tab{padding:11px 16px;font-size:13.5px;font-weight:600;color:var(--mut);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--teal);border-bottom-color:var(--teal)}
+.hamb{display:none}
+/* barcode */
+.bc{display:flex;align-items:flex-end;height:58px;gap:0;background:#fff}
+.bc i{display:block;height:100%}
+.bc.sm{height:40px}
+.tag{width:300px;border:1px solid #111;border-radius:8px;padding:14px 16px;background:#fff;color:#111;font-family:'JetBrains Mono',monospace}
+/* e-sign */
+.sigbox{border:1px dashed #16A34A;background:#F0FBF4;border-radius:10px;padding:13px 15px}
+.sigpad{border:1px solid var(--line);border-radius:9px;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:16px;font-style:italic;color:var(--navy);background:#FbFcfe}
+/* voice FAB + overlay */
+.fab{position:fixed;bottom:22px;left:22px;z-index:300;display:flex;align-items:center;gap:10px;height:52px;padding:0 20px 0 16px;border-radius:30px;background:var(--navy);color:#fff;font-weight:600;font-size:14px;box-shadow:0 12px 30px rgba(10,22,40,.32);transition:transform .12s,background .14s}
+.fab:hover{transform:translateY(-2px);background:#16304f}
+.fab .mic{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:15px}
+@keyframes pulsering{0%{box-shadow:0 0 0 0 rgba(0,168,150,.5)}70%{box-shadow:0 0 0 26px rgba(0,168,150,0)}100%{box-shadow:0 0 0 0 rgba(0,168,150,0)}}
+@keyframes wave{0%,100%{height:8px}50%{height:28px}}
+.vmic{width:96px;height:96px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:40px;color:#fff;margin:0 auto;animation:pulsering 1.6s infinite}
+.vmic.idle{animation:none;background:var(--navy)}
+.vwave{display:flex;align-items:center;justify-content:center;gap:5px;height:34px}
+.vwave i{width:5px;border-radius:3px;background:var(--teal);animation:wave 1s infinite}
+.vwave i:nth-child(2){animation-delay:.15s}.vwave i:nth-child(3){animation-delay:.3s}.vwave i:nth-child(4){animation-delay:.45s}.vwave i:nth-child(5){animation-delay:.6s}
+/* print */
+.printroot{position:fixed;inset:0;z-index:500;background:rgba(10,22,40,.55);overflow:auto;padding:24px;display:flex;flex-direction:column;align-items:center}
+.printsheet{background:#fff;border-radius:12px;padding:26px;max-width:860px;width:100%}
+.taggrid{display:flex;flex-wrap:wrap;gap:16px}
+@media print{
+ body *{visibility:hidden!important}
+ .printarea,.printarea *{visibility:visible!important}
+ .printarea{position:absolute;inset:0;background:#fff;padding:0;margin:0}
+ .noprint{display:none!important}
+ .tag{break-inside:avoid;page-break-inside:avoid}
+}
+@media(max-width:860px){
+ .side{position:fixed;left:0;top:0;bottom:0;z-index:100;transform:translateX(-100%);box-shadow:0 0 40px rgba(0,0,0,.3)}
+ .side.open{transform:translateX(0)}
+ .side.col{width:240px}
+ .hamb{display:flex}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .tgrid{grid-template-columns:1fr}
+ .two-col{flex-direction:column !important}
+ .chat-wrap{flex-direction:column}.sugg{width:100%}
+ .wrap{padding:18px}
+ .uchip .un,.uchip .ur{display:none}
+}
+</style>
+</helmet>
+<div class="root">{{ app }}</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}">
+class Component extends DCLogic {
+  state = {
+    user: null, page:'home', params:{},
+    sidebarCol:false, mobileOpen:false, userMenu:false,
+    records: this.seedRecords(),
+    activity: this.seedActivity(),
+    audit: this.seedAudit(),
+    toasts:[], tid:1,
+    wizard:{ step:1, type:null, form:{}, access:'project', workflow:'peer', submitting:false, newId:null },
+    chat:[], chatInput:'', chatTyping:false, suggested:this.defaultSuggest(),
+    commentDraft:{}, modal:null, adminTab:'users', printTags:null, voice:null,
+    sortKey:'date', sortDir:'desc',
+    filters:{project:'',type:'',researcher:'',status:'',date:''},
+    searchQuery:'',
+  };
+
+  // ---------- static config ----------
+  USERS(){ return {
+    scientist:{id:'scientist',name:'Dr. Lena Hoffmann',first:'Lena',short:'L. Hoffmann',role:'R&D Scientist',initials:'LH',color:'#00A896'},
+    coordinator:{id:'coordinator',name:'Dr. Sofia Ng',first:'Sofia',short:'S. Ng',role:'Clinical Trial Coordinator',initials:'SN',color:'#2563EB'},
+    management:{id:'management',name:'Erik Sørensen',first:'Erik',short:'E. Sørensen',role:'ALK Management',initials:'ES',color:'#7C3AED'},
+    it:{id:'it',name:'Mikkel Dam',first:'Mikkel',short:'M. Dam',role:'IT / Data Engineer',initials:'MD',color:'#D97706'},
+  };}
+  PROJECTS(){ return ['SLIT Efficacy Program','ALK Oncology','HDM Immunotherapy','Allergen Discovery']; }
+  PEOPLE(){ return ['Dr. Lena Hoffmann','Dr. Sofia Ng','Dr. M. Larsen','Dr. R. Bianchi','Erik Sørensen','Mikkel Dam']; }
+  TYPES(){ return {wetlab:'Wet-lab',clinical:'Clinical-trial',pcr:'PCR',sample:'Sample analysis',document:'Document',import:'Data import'}; }
+  TYPE_ICON(){ return {wetlab:['🧪','#E7F5F3'],clinical:['🩺','#EAEEFB'],pcr:['🧬','#F3EAFB'],sample:['🔬','#FCF1E6'],document:['📄','#EEF0F6'],import:['📊','#E9F3EC']}; }
+
+  statusClass(s){ return {'Approved':'s-approved','Under Review':'s-review','In Progress':'s-progress','Draft':'s-draft','Rejected':'s-rejected'}[s]; }
+  statusColor(s){ return {'Approved':'#16A34A','Under Review':'#D97706','In Progress':'#2563EB','Draft':'#6B7280','Rejected':'#DC2626'}[s]; }
+  rcolor(short){ const m={'L. Hoffmann':'#00A896','S. Ng':'#2563EB','M. Larsen':'#0891B2','R. Bianchi':'#DB7C32','E. Sørensen':'#7C3AED','M. Dam':'#D97706'}; return m[short]||'#6B7280'; }
+  initialsOf(short){ const p=short.replace('.','').split(' '); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); }
+
+  // ---------- seed data ----------
+  seedRecords(){
+    const C=(author,initials,color,time,text)=>({author,initials,color,time,text});
+    const f=(name,type,date)=>({name,type,date});
+    const R=[
+      {id:'EXP-2026-033',title:'SLIT dose-response assay — Phl p 5 grass pollen',type:'wetlab',researcher:'L. Hoffmann',date:'2026-06-18',project:'SLIT Efficacy Program',sample:'A-08',status:'Approved',access:'All ALK researchers',
+        tags:['SLIT','Phl p 5','grass pollen','dose-response'],sampleType:'',
+        meta:[['Protocol used','ELISA'],['Cell line / organism','PBMC (human)'],['Equipment used','Tecan Spark plate reader'],['Quality','—']],
+        desc:'Sublingual immunotherapy dose-response evaluation against Phl p 5 major grass-pollen allergen. Five escalating doses tested in triplicate; IgG4 blocking response measured by ELISA. Clear dose-dependent induction observed with plateau at 100 µg.',
+        files:[f('slit_doseresponse_raw.xlsx','XLSX','2026-06-18'),f('igg4_curve.pdf','PDF','2026-06-18'),f('protocol_v3.docx','DOCX','2026-06-15')],
+        relatedIds:['EXP-2026-039','EXP-2026-025'],reviewerId:null,
+        comments:[C('Dr. R. Bianchi','RB','#DB7C32','4 days ago','Beautiful dose-response curve. Did you correct for plate edge effects?'),C('Dr. Lena Hoffmann','LH','#00A896','3 days ago','Yes — edge wells excluded and normalised to internal control. Updated in v3.')]},
+      {id:'EXP-2026-041',title:'EML4-ALK fusion variant screening',type:'pcr',researcher:'M. Larsen',date:'2026-06-20',project:'ALK Oncology',sample:'A-12',status:'Approved',access:'Project team',
+        tags:['EML4-ALK','fusion','variant','crizotinib'],
+        meta:[['Target gene','EML4-ALK v3'],['Annealing temp','60 °C'],['Cycles','35'],['Result','Positive']],
+        desc:'Screening of EML4-ALK fusion variant 3 across patient-derived organoid panel. Variant-specific primers validated against reference standards. Sample A-12 confirmed positive with expected 312 bp band.',
+        files:[f('eml4alk_gel.tif','TIFF','2026-06-20'),f('primer_validation.csv','CSV','2026-06-19')],
+        relatedIds:['EXP-2026-029','EXP-2026-031'],reviewerId:null,
+        comments:[C('Dr. Sofia Ng','SN','#2563EB','5 days ago','Can you confirm the v3 vs v1 primer specificity? Important for the cohort assignment.'),C('Dr. M. Larsen','ML','#0891B2','5 days ago','Confirmed — v3 primers show no cross-reactivity with v1. Gel attached.')]},
+      {id:'EXP-2026-029',title:'Sample characterisation — HDM extract (Der p 1)',type:'sample',researcher:'R. Bianchi',date:'2026-06-12',project:'HDM Immunotherapy',sample:'A-12',status:'Approved',access:'All ALK researchers',
+        tags:['Der p 1','house dust mite','ImmunoCAP','characterisation'],sampleType:'Tissue',
+        meta:[['Sample type','Cell line'],['Storage','−80 °C'],['Method','ImmunoCAP / SDS-PAGE'],['Quality score','★★★★☆']],
+        desc:'Characterisation of house dust mite allergen extract focusing on Der p 1 content. ImmunoCAP quantification and SDS-PAGE purity assessment. Der p 1 concentration measured at 42 µg/mL, purity >90%.',
+        files:[f('derp1_immunocap.pdf','PDF','2026-06-12'),f('sdspage_gel.png','PNG','2026-06-11')],
+        relatedIds:['EXP-2026-041','EXP-2026-019'],reviewerId:null,
+        comments:[C('Dr. Lena Hoffmann','LH','#00A896','1 week ago','Strong Der p 1 yield. This batch is good for the SLIT escalation work.'),C('Dr. R. Bianchi','RB','#DB7C32','6 days ago','Agreed, reserving 5 vials for the dose-response series.')]},
+      {id:'EXP-2026-037',title:'Lorlatinib Phase II cohort — interim analysis',type:'clinical',researcher:'S. Ng',date:'2026-06-19',project:'ALK Oncology',sample:'—',status:'Under Review',access:'Public (management visible)',
+        tags:['lorlatinib','Phase II','cohort','interim'],clinical:true,
+        meta:[['Study ID','ALK-LOR-2026'],['Phase','II'],['Cohort','C-204'],['Patient count','86']],
+        desc:'Interim efficacy and safety analysis of the Lorlatinib Phase II cohort C-204 in ALK-positive patients. Primary endpoint of objective response rate trending favourably at 64%. Two grade-3 adverse events under review.',
+        files:[f('interim_report.pdf','PDF','2026-06-19'),f('cohort_c204.xlsx','XLSX','2026-06-18'),f('ae_log.csv','CSV','2026-06-19')],
+        relatedIds:['EXP-2026-025','EXP-2026-008'],reviewerId:'scientist',
+        comments:[C('Erik Sørensen','ES','#7C3AED','2 days ago','Strong interim ORR. Flag the adverse events clearly for the board summary.'),C('Dr. Sofia Ng','SN','#2563EB','2 days ago','Will include a dedicated AE section. Awaiting reviewer sign-off before final.')]},
+      {id:'EXP-2026-039',title:'ImmunoCAP IgE quantification — grass pollen panel',type:'wetlab',researcher:'L. Hoffmann',date:'2026-06-17',project:'SLIT Efficacy Program',sample:'A-15',status:'Under Review',access:'Project team',
+        tags:['ImmunoCAP','IgE','grass pollen','Phl p 5'],
+        meta:[['Protocol used','ImmunoCAP'],['Cell line / organism','Patient sera (n=24)'],['Equipment used','Phadia 250'],['Quality','—']],
+        desc:'Quantification of specific IgE against grass pollen allergen components in 24 patient sera. Phl p 1 and Phl p 5 dominant. Results support component-resolved patient stratification for SLIT.',
+        files:[f('ige_panel.xlsx','XLSX','2026-06-17'),f('phadia_export.csv','CSV','2026-06-17')],
+        relatedIds:['EXP-2026-033'],reviewerId:'coordinator',
+        comments:[C('Dr. Sofia Ng','SN','#2563EB','1 day ago','Could you clarify the reagent concentration on line 3 of the protocol?'),C('Dr. Lena Hoffmann','LH','#00A896','1 day ago','It is 0.5 µg/mL — corrected in the attached sheet.')]},
+      {id:'EXP-2026-031',title:'Crizotinib resistance — organoid viability',type:'wetlab',researcher:'R. Bianchi',date:'2026-06-14',project:'ALK Oncology',sample:'A-21',status:'In Progress',access:'Project team',
+        tags:['crizotinib','resistance','organoid','viability'],
+        meta:[['Protocol used','Cell viability'],['Cell line / organism','PDO-44 organoid'],['Equipment used','CellTiter-Glo'],['Quality','—']],
+        desc:'Cell viability assay measuring crizotinib resistance in patient-derived organoid line PDO-44. Dose escalation 0–1 µM. Preliminary IC50 shift suggests acquired resistance; lorlatinib comparison pending.',
+        files:[f('viability_raw.xlsx','XLSX','2026-06-14')],
+        relatedIds:['EXP-2026-041'],reviewerId:null,
+        comments:[C('Dr. M. Larsen','ML','#0891B2','3 days ago','Worth running the lorlatinib arm in parallel for the resistance story.'),C('Dr. R. Bianchi','RB','#DB7C32','3 days ago','Planned for next week once the new organoid passage is ready.')]},
+      {id:'EXP-2026-025',title:'SCIT vs SLIT comparative efficacy — Phase III',type:'clinical',researcher:'S. Ng',date:'2026-06-08',project:'SLIT Efficacy Program',sample:'—',status:'Approved',access:'Public (management visible)',
+        tags:['SCIT','SLIT','Phase III','efficacy'],clinical:true,
+        meta:[['Study ID','ALK-SCIT-205'],['Phase','III'],['Cohort','C-301 / C-302'],['Patient count','312']],
+        desc:'Head-to-head Phase III comparison of subcutaneous (SCIT) versus sublingual (SLIT) immunotherapy for grass-pollen allergic rhinitis. Combined symptom-medication score primary endpoint met for both arms; SLIT showed superior adherence.',
+        files:[f('phase3_final.pdf','PDF','2026-06-08'),f('symptom_scores.xlsx','XLSX','2026-06-07')],
+        relatedIds:['EXP-2026-033','EXP-2026-037'],reviewerId:null,
+        comments:[C('Erik Sørensen','ES','#7C3AED','2 weeks ago','Excellent adherence data for SLIT — strong commercial case.'),C('Dr. Sofia Ng','SN','#2563EB','2 weeks ago','Thanks Erik. Final report approved and locked.')]},
+      {id:'EXP-2026-022',title:'Der p 1 ELISA quantification protocol (SOP)',type:'document',researcher:'L. Hoffmann',date:'2026-06-05',project:'HDM Immunotherapy',sample:'—',status:'In Progress',access:'All ALK researchers',
+        tags:['SOP','Der p 1','ELISA','protocol'],
+        meta:[['Document type','SOP'],['Author','Dr. Lena Hoffmann'],['Version','v2.1'],['Related','EXP-2026-029']],
+        desc:'Standard operating procedure for quantifying Der p 1 allergen by sandwich ELISA. Covers reagent preparation, plate coating, standard curve, and acceptance criteria. Currently in revision to align with new ImmunoCAP reference.',
+        files:[f('SOP_derp1_elisa_v2.1.docx','DOCX','2026-06-05')],
+        relatedIds:['EXP-2026-029'],reviewerId:null,
+        comments:[C('Dr. R. Bianchi','RB','#DB7C32','5 days ago','Please add the acceptance CV threshold to section 4.'),C('Dr. Lena Hoffmann','LH','#00A896','4 days ago','Added — CV <15% across duplicates. Revising now.')]},
+      {id:'EXP-2026-019',title:'House dust mite organoid — PCR panel',type:'pcr',researcher:'L. Hoffmann',date:'2026-06-03',project:'HDM Immunotherapy',sample:'A-18',status:'Under Review',access:'Project team',
+        tags:['house dust mite','organoid','PCR','Der p'],
+        meta:[['Target gene','Der p 1 / Der p 2'],['Annealing temp','58 °C'],['Cycles','32'],['Result','Positive']],
+        desc:'PCR panel detecting Der p 1 and Der p 2 transcripts in airway-epithelial organoids exposed to HDM extract. Both targets amplified; expression upregulated 2.4-fold post-exposure.',
+        files:[f('hdm_pcr_gel.tif','TIFF','2026-06-03'),f('ct_values.csv','CSV','2026-06-03')],
+        relatedIds:['EXP-2026-029'],reviewerId:'scientist',
+        comments:[C('Dr. Sofia Ng','SN','#2563EB','6 days ago','Nice upregulation. What was the exposure time?'),C('Dr. Lena Hoffmann','LH','#00A896','6 days ago','24 hours at 10 µg/mL extract.')]},
+      {id:'EXP-2026-011',title:'Bulk instrument export — flow cytometry batch (April)',type:'import',researcher:'M. Dam',date:'2026-05-28',project:'Allergen Discovery',sample:'—',status:'In Progress',access:'Project team',
+        tags:['flow cytometry','bulk','import','FACS'],
+        meta:[['Instrument','BD FACSymphony'],['File format','CSV'],['Data points','148,200'],['Batch','APR-2026']],
+        desc:'Bulk import of April flow-cytometry batch covering 96 samples from the basophil activation screen. Automated parsing of FCS exports into unified schema. Validation of gating metadata in progress.',
+        files:[f('facs_april_batch.csv','CSV','2026-05-28'),f('gating_meta.json','JSON','2026-05-28')],
+        relatedIds:[],reviewerId:null,
+        comments:[C('Dr. Lena Hoffmann','LH','#00A896','3 weeks ago','Can we map the sample IDs to the SLIT cohort automatically?'),C('Mikkel Dam','MD','#D97706','3 weeks ago','Yes — building the lookup join now, should be live this week.')]},
+      {id:'EXP-2026-008',title:'Phl p 5 safety profile — adverse events log',type:'clinical',researcher:'S. Ng',date:'2026-05-22',project:'SLIT Efficacy Program',sample:'—',status:'Rejected',access:'Public (management visible)',
+        tags:['Phl p 5','safety','adverse events','Phase II'],clinical:true,
+        meta:[['Study ID','ALK-PHL-188'],['Phase','II'],['Cohort','C-188'],['Patient count','54']],
+        desc:'Safety profile and adverse-event log for the Phl p 5 SLIT Phase II cohort. Submission rejected: AE coding incomplete (MedDRA terms missing for 6 events) and denominators inconsistent. Requires re-submission after data cleaning.',
+        files:[f('ae_log_draft.xlsx','XLSX','2026-05-22')],
+        relatedIds:['EXP-2026-025'],reviewerId:null,
+        comments:[C('Erik Sørensen','ES','#7C3AED','1 month ago','Cannot approve — AE coding incomplete. Please re-code to MedDRA and resubmit.'),C('Dr. Sofia Ng','SN','#2563EB','1 month ago','Understood, re-coding underway. Will resubmit as a new version.')]},
+      {id:'EXP-2026-005',title:'Grass pollen allergen — organoid characterisation',type:'sample',researcher:'R. Bianchi',date:'2026-05-19',project:'Allergen Discovery',sample:'A-03',status:'Draft',access:'Private (only me)',
+        tags:['grass pollen','organoid','characterisation','Phl p'],sampleType:'Organoid',
+        meta:[['Sample type','Organoid'],['Storage','Liquid N₂'],['Method','Confocal / qPCR'],['Quality score','★★★☆☆']],
+        desc:'Draft characterisation of airway organoids for grass-pollen allergen response studies. Morphology and marker expression being documented. Not yet ready for review.',
+        files:[f('organoid_images_draft.zip','ZIP','2026-05-19')],
+        relatedIds:[],reviewerId:null,
+        comments:[C('Dr. R. Bianchi','RB','#DB7C32','5 weeks ago','Draft only — still collecting confocal stacks before submitting.')]},
+    ];
+    return R;
+  }
+  buildTimeline(r){
+    const stages={'Draft':['Draft'],'In Progress':['Draft','In Progress'],'Under Review':['Draft','In Progress','Under Review'],'Approved':['Draft','In Progress','Under Review','Approved'],'Rejected':['Draft','In Progress','Under Review','Rejected']};
+    const seq=stages[r.status]||['Draft'];
+    const actors={'Draft':r.researcher,'In Progress':r.researcher,'Under Review':r.researcher,'Approved':(r.signature?r.signature.byShort:'E. Sørensen'),'Rejected':'E. Sørensen'};
+    const base=new Date(r.date); const out=[];
+    seq.forEach((st,i)=>{ const d=new Date(base); d.setDate(d.getDate()-(seq.length-1-i)*2); out.push({status:st,actor:actors[st],date:d.toISOString().slice(0,10)}); });
+    return out;
+  }
+  seedActivity(){ return [
+    {who:'M. Larsen',init:'ML',color:'#0891B2',action:'approved',rec:'EXP-2026-041',time:'12 min ago'},
+    {who:'S. Ng',init:'SN',color:'#2563EB',action:'submitted for review',rec:'EXP-2026-037',time:'1 hour ago'},
+    {who:'R. Bianchi',init:'RB',color:'#DB7C32',action:'commented on',rec:'EXP-2026-022',time:'2 hours ago'},
+    {who:'L. Hoffmann',init:'LH',color:'#00A896',action:'uploaded',rec:'EXP-2026-039',time:'5 hours ago'},
+    {who:'E. Sørensen',init:'ES',color:'#7C3AED',action:'rejected',rec:'EXP-2026-008',time:'yesterday'},
+  ];}
+  seedAudit(){ return [
+    {time:'2026-06-24 09:14',user:'M. Dam',action:'Signed in',rec:'—'},
+    {time:'2026-06-24 08:52',user:'M. Larsen',action:'Approved record',rec:'EXP-2026-041'},
+    {time:'2026-06-24 08:40',user:'L. Hoffmann',action:'Signed in',rec:'—'},
+    {time:'2026-06-23 17:22',user:'S. Ng',action:'Submitted for review',rec:'EXP-2026-037'},
+    {time:'2026-06-23 16:05',user:'R. Bianchi',action:'Added comment',rec:'EXP-2026-022'},
+    {time:'2026-06-23 14:30',user:'L. Hoffmann',action:'Uploaded record',rec:'EXP-2026-039'},
+    {time:'2026-06-23 11:48',user:'E. Sørensen',action:'Rejected record',rec:'EXP-2026-008'},
+    {time:'2026-06-22 15:10',user:'M. Dam',action:'Exported database (CSV)',rec:'—'},
+    {time:'2026-06-22 10:33',user:'S. Ng',action:'Added comment',rec:'EXP-2026-039'},
+    {time:'2026-06-21 09:05',user:'M. Larsen',action:'Uploaded record',rec:'EXP-2026-041'},
+  ];}
+  defaultSuggest(){ return ['Show me the latest experiments','Which records are under review?','Find experiments using sample A-12','Summarise SLIT immunotherapy studies','What can you do?']; }
+
+  // ---------- permissions ----------
+  canUpload(){ const u=this.state.user; return u&&(u.id==='scientist'||u.id==='coordinator'); }
+  isReadOnly(){ const u=this.state.user; return u&&(u.id==='management'||u.id==='it'); }
+  hasClinical(){ const u=this.state.user; return u&&(u.id==='coordinator'||u.id==='management'||u.id==='it'); }
+  hasWetlab(){ const u=this.state.user; return u&&u.id!=='coordinator'; }
+
+  // ---------- actions ----------
+  login(id){ const u=this.USERS()[id];
+    this.setState({user:u,page:'home',userMenu:false,chat:[{role:'b',q:'__intro'}],suggested:this.defaultSuggest(),
+      audit:[{time:this.nowStamp(),user:u.short,action:'Signed in',rec:'—'},...this.state.audit]});
+  }
+  logout(){ this.setState({user:null,userMenu:false,page:'home'}); }
+  nav(page,params={}){ this.setState({page,params,userMenu:false,mobileOpen:false}); const sc=document.querySelector('.scroll'); if(sc) sc.scrollTop=0; }
+  openRecord(id){ this.nav('record',{id}); }
+  nowStamp(){ const d=new Date(); return d.toISOString().slice(0,10)+' '+d.toTimeString().slice(0,5); }
+  toast(msg){ const id=this.state.tid; this.setState(s=>({toasts:[...s.toasts,{id,msg}],tid:s.tid+1}));
+    setTimeout(()=>this.setState(s=>({toasts:s.toasts.filter(t=>t.id!==id)})),3000); }
+
+  // ---------- main render ----------
+  renderVals(){ return { app: this.state.user ? this.shell() : this.login_screen() }; }
+
+  // ===== LOGIN =====
+  login_screen(){ const h=React.createElement; const U=this.USERS();
+    const roleCard=(id)=>{ const u=U[id]; return h('button',{key:id,className:'lrow',style:{border:'1px solid var(--line)',borderRadius:'11px',marginBottom:'10px',padding:'13px 14px',background:'#fff',width:'100%'},onClick:()=>this.login(id)},
+      h('div',{className:'av',style:{background:u.color,width:'40px',height:'40px'}},u.initials),
+      h('div',{style:{flex:1}}, h('div',{style:{fontWeight:600,fontSize:'14px'}},u.name), h('div',{className:'sub',style:{fontSize:'12.5px'}},u.role)),
+      h('div',{style:{color:'var(--teal)',fontWeight:700,fontSize:'18px'}},'→'));
+    };
+    return h('div',{style:{height:'100vh',overflowY:'auto',background:'linear-gradient(140deg,#0A1628 0%,#10263f 55%,#0c3b39 100%)'}},
+      h('div',{style:{minHeight:'100%',display:'flex',alignItems:'center',justifyContent:'center',padding:'24px'}},
+      h('div',{className:'fade',style:{width:'920px',maxWidth:'100%',display:'flex',background:'#fff',borderRadius:'20px',overflow:'hidden',boxShadow:'0 30px 80px rgba(0,0,0,.4)'}},
+        // left brand
+        h('div',{style:{flex:'0 0 42%',background:'var(--navy)',color:'#fff',padding:'44px 38px',display:'flex',flexDirection:'column',justifyContent:'space-between'}},
+          h('div',{},
+            h('div',{style:{display:'flex',alignItems:'center',gap:'11px',marginBottom:'40px'}},
+              h('div',{className:'logo',style:{width:'38px',height:'38px',fontSize:'18px'}},'A'),
+              h('div',{style:{fontWeight:700,fontSize:'18px'}},'ALK ',h('span',{style:{color:'var(--teal)'}},'Atlas'))),
+            h('div',{style:{fontSize:'27px',fontWeight:700,lineHeight:1.25,letterSpacing:'-.5px'}},'Less time searching for data.'),
+            h('div',{style:{fontSize:'27px',fontWeight:700,lineHeight:1.25,letterSpacing:'-.5px',color:'var(--teal)'}},'More time on breakthrough science.'),
+            h('div',{style:{marginTop:'18px',color:'#9fb0c4',fontSize:'14px',lineHeight:1.6}},'The unified research data platform for ALK-Abelló — every experiment, trial and sample in one searchable home.')),
+          h('div',{style:{color:'#7d8aa3',fontSize:'12px'}},'Allergy immunotherapy R&D · Internal platform')),
+        // right form
+        h('div',{style:{flex:1,padding:'44px 40px'}},
+          h('div',{className:'h1',style:{fontSize:'22px'}},'Sign in'),
+          h('div',{className:'sub',style:{marginTop:'4px'}},'Welcome back. Access your research database.'),
+          h('div',{className:'field',style:{marginTop:'26px'}}, h('label',{className:'label'},'Username'), h('input',{className:'input',placeholder:'name@alk-abello.com',defaultValue:''})),
+          h('div',{className:'field'}, h('label',{className:'label'},'Password'), h('input',{className:'input',type:'password',placeholder:'••••••••',defaultValue:''})),
+          h('button',{className:'btn btn-p',style:{width:'100%',height:'42px',marginTop:'4px'},onClick:()=>this.login('scientist')},'Sign in'),
+          h('div',{style:{display:'flex',alignItems:'center',gap:'12px',margin:'24px 0 16px'}},
+            h('div',{style:{flex:1,height:'1px',background:'var(--line)'}}),
+            h('div',{className:'sub',style:{fontSize:'12px'}},'Or sign in as (demo)'),
+            h('div',{style:{flex:1,height:'1px',background:'var(--line)'}})),
+          ['scientist','coordinator','management','it'].map(roleCard)
+        ))));
+  }
+
+  // ===== SHELL =====
+  shell(){ const h=React.createElement;
+    return h('div',{className:'app'},
+      this.state.mobileOpen?h('div',{onClick:()=>this.setState({mobileOpen:false}),style:{position:'fixed',inset:0,background:'rgba(0,0,0,.4)',zIndex:90}}):null,
+      this.sidebar(), 
+      h('div',{className:'main'}, this.topbar(),
+        h('div',{className:'scroll'}, this.page())),
+      this.fab(), this.voiceOverlay(), this.printOverlay(),
+      this.toastStack(), this.modalLayer());
+  }
+
+  sidebar(){ const h=React.createElement; const u=this.state.user; const col=this.state.sidebarCol;
+    let items=[['home','⌂','Home'],['templates','◳','Templates'],['database','▦','Database'],['search','⌕','Search'],['chatbot','✦','Chatbot']];
+    if(!this.canUpload()) items=items.filter(i=>i[0]!=='templates');
+    if(u.id==='it') items.push(['admin','◈','Admin']);
+    const item=([id,ic,label])=>h('button',{key:id,className:'nav-i'+(this.state.page===id||(id==='database'&&this.state.page==='record')?' on':''),onClick:()=>this.nav(id),title:label},
+      h('span',{className:'ico'},ic), col?null:h('span',null,label));
+    return h('div',{className:'side'+(col?' col':'')+(this.state.mobileOpen?' open':'')},
+      h('div',{className:'side-top'}, h('div',{className:'logo'},'A'), col?null:h('div',{className:'logo-tx'},'ALK ',h('span',null,'Atlas'))),
+      h('div',{className:'nav'}, items.map(item)),
+      h('div',{className:'side-bot'}, h('span',{className:'dot'}), col?null:h('span',null,'Unified DB connected')));
+  }
+
+  topbar(){ const h=React.createElement; const u=this.state.user;
+    const crumbMap={home:'Home',templates:'Templates',database:'Database',search:'Search',chatbot:'Chatbot',admin:'Admin',record:'Database'};
+    const crumbs=[h('b',{key:0},'ALK Atlas'),h('span',{key:1,className:'crumb-sep'},'/'),h('span',{key:2},crumbMap[this.state.page]||'Home')];
+    if(this.state.page==='record'){ const r=this.rec(this.state.params.id); crumbs.push(h('span',{key:3,className:'crumb-sep'},'/'),h('span',{key:4,className:'mono',style:{fontSize:'12px'}},r?r.id:'')); }
+    return h('div',{className:'top'},
+      h('button',{className:'collapse hamb',onClick:()=>this.setState({mobileOpen:true})},'☰'),
+      h('button',{className:'collapse',style:{display:window.innerWidth<860?'none':'flex'},onClick:()=>this.setState(s=>({sidebarCol:!s.sidebarCol}))},'⇔'),
+      h('div',{className:'crumb'},crumbs),
+      h('div',{style:{position:'relative'}},
+        h('button',{className:'uchip',onClick:()=>this.setState(s=>({userMenu:!s.userMenu}))},
+          h('div',{style:{textAlign:'right'}}, h('div',{className:'un'},u.name), h('div',{className:'ur'},u.role)),
+          h('div',{className:'av',style:{background:u.color}},u.initials)),
+        this.state.userMenu?h('div',{className:'menu'},
+          h('div',{className:'menu-h'}, h('div',{style:{fontWeight:600,fontSize:'13.5px'}},u.name), h('div',{className:'sub',style:{fontSize:'12px',marginTop:'2px'}},u.role)),
+          h('button',{className:'menu-i',onClick:()=>{this.setState({userMenu:false});this.toast('Profile is a demo placeholder');}},h('span',null,'👤'),'Profile'),
+          h('div',{style:{fontSize:'11px',color:'var(--mut)',padding:'8px 12px 4px',fontWeight:600,textTransform:'uppercase',letterSpacing:'.4px'}},'Switch user'),
+          Object.values(this.USERS()).map(x=>h('button',{key:x.id,className:'menu-i',onClick:()=>this.login(x.id)},
+            h('div',{className:'av',style:{background:x.color,width:'26px',height:'26px',fontSize:'10px'}},x.initials),
+            h('div',{style:{lineHeight:1.2}},h('div',{style:{fontSize:'12.5px',fontWeight:x.id===u.id?700:500}},x.short),h('div',{style:{fontSize:'10.5px',color:'var(--mut)'}},x.role)))),
+          h('div',{style:{height:'1px',background:'var(--line)',margin:'6px 0'}}),
+          h('button',{className:'menu-i dz',onClick:()=>this.logout()},h('span',null,'⎋'),'Sign out')
+        ):null));
+  }
+
+  // ===== ROUTER =====
+  page(){ switch(this.state.page){
+    case 'home':return this.home(); case 'templates':return this.templates(); case 'database':return this.database();
+    case 'record':return this.record(); case 'search':return this.search(); case 'chatbot':return this.chatbot();
+    case 'admin':return this.admin(); default:return this.home(); } }
+
+  rec(id){ return this.state.records.find(r=>r.id===id); }
+  visibleRecords(){ const u=this.state.user; let recs=this.state.records;
+    if(u.id==='coordinator'){ recs=recs.filter(r=>['clinical','document','sample'].includes(r.type)||r.access==='All ALK researchers'||r.shared); }
+    return recs; }
+
+  badge(status){ const h=React.createElement; return h('span',{className:'badge '+this.statusClass(status)},h('span',{className:'bdot'}),status); }
+  tyBadge(type){ const h=React.createElement; return h('span',{className:'ty '+type},this.TYPES()[type]); }
+
+  // ===== HOME =====
+  home(){ const h=React.createElement; const u=this.state.user;
+    const hr=new Date().getHours(); const greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
+    const today=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    const recs=this.state.records;
+    const mine=recs.filter(r=>r.researcher===u.short);
+    const pending=recs.filter(r=>r.status==='Under Review'&&r.reviewerId===u.id);
+    const stats=[['Total Records',recs.length,'📁','#E7F5F3'],['My Records',mine.length,'👤','#EAEEFB'],['Pending Approvals',pending.length,'⏳','#FEF1DC'],['Projects Active',3,'🗂️','#F3EAFB']];
+    const recent=recs.slice(0,6);
+    return h('div',{className:'wrap fade'},
+      h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'12px'}},
+        h('div',{}, h('div',{className:'h1'},greet+', '+u.first), h('div',{className:'sub',style:{marginTop:'4px'}},today)),
+        this.canUpload()?h('button',{className:'btn btn-p',onClick:()=>this.nav('templates')},h('span',{style:{fontSize:'16px'}},'＋'),'New experiment'):null),
+      // stats
+      h('div',{className:'stats',style:{marginTop:'22px'}}, stats.map(([l,n,ic,bg],i)=>h('div',{key:i,className:'stat'},
+        h('div',{className:'ic',style:{background:bg}},ic), h('div',{className:'lbl'},l), h('div',{className:'num'},n)))),
+      // R&D banner
+      this.canUpload()?h('div',{style:{marginTop:'18px',background:'linear-gradient(100deg,#00A896,#018f80)',borderRadius:'14px',padding:'18px 22px',display:'flex',alignItems:'center',justifyContent:'space-between',color:'#fff',cursor:'pointer',flexWrap:'wrap',gap:'10px'},onClick:()=>this.nav('templates')},
+        h('div',{}, h('div',{style:{fontWeight:700,fontSize:'16px'}},'Ready to upload an experiment?'), h('div',{style:{opacity:.9,fontSize:'13.5px',marginTop:'2px'}},'Pick a template and capture your results in five quick steps.')),
+        h('div',{style:{display:'flex',alignItems:'center',gap:'8px',fontWeight:700,background:'rgba(255,255,255,.16)',padding:'10px 16px',borderRadius:'9px'}},'Start here →')):null,
+      // two columns
+      h('div',{className:'two-col',style:{display:'flex',gap:'18px',marginTop:'18px'}},
+        // left
+        h('div',{style:{flex:'1.4',minWidth:0}},
+          h('div',{className:'card',style:{padding:'6px 8px'}},
+            h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 12px 8px'}},
+              h('div',{className:'h2'},'Recently uploaded experiments'),
+              h('button',{className:'btn-g',style:{fontSize:'13px',fontWeight:600},onClick:()=>this.nav('database')},'View all →')),
+            recent.map(r=>h('div',{key:r.id,className:'lrow',onClick:()=>this.openRecord(r.id)},
+              h('div',{className:'tic',style:{width:'38px',height:'38px',fontSize:'17px',margin:0,background:this.TYPE_ICON()[r.type][1]}},this.TYPE_ICON()[r.type][0]),
+              h('div',{style:{flex:1,minWidth:0}},
+                h('div',{style:{fontWeight:600,fontSize:'13.5px',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}},r.title),
+                h('div',{style:{display:'flex',gap:'8px',alignItems:'center',marginTop:'3px'}},this.tyBadge(r.type),h('span',{className:'sub',style:{fontSize:'12px'}},r.researcher+' · '+this.fmt(r.date)))),
+              this.badge(r.status))))),
+        // right
+        h('div',{style:{flex:'1',minWidth:0,display:'flex',flexDirection:'column',gap:'18px'}},
+          h('div',{className:'card',style:{padding:'16px 18px'}},
+            h('div',{className:'h2',style:{marginBottom:'4px'}},'My pending actions'),
+            h('div',{className:'sub',style:{fontSize:'12.5px',marginBottom:'12px'}},pending.length?'Records awaiting your review':'You are all caught up'),
+            pending.length?pending.map(r=>h('div',{key:r.id,style:{border:'1px solid var(--line)',borderRadius:'11px',padding:'12px',marginBottom:'10px'}},
+              h('div',{style:{fontWeight:600,fontSize:'13.5px',cursor:'pointer'},onClick:()=>this.openRecord(r.id)},r.title),
+              h('div',{style:{display:'flex',gap:'7px',alignItems:'center',margin:'6px 0 10px'}},this.tyBadge(r.type),h('span',{className:'mono',style:{fontSize:'11px',color:'var(--mut)'}},r.id)),
+              h('div',{style:{display:'flex',gap:'8px'}},
+                h('button',{className:'btn btn-p btn-sm',onClick:()=>this.openModal('esign',r.id)},'Approve & sign'),
+                h('button',{className:'btn btn-o btn-sm',onClick:()=>this.openModal('changes',r.id)},'Request changes'))
+            )):h('div',{className:'empty',style:{padding:'24px'}},h('div',{className:'eic',style:{width:'54px',height:'54px',fontSize:'22px',marginBottom:'10px'}},'✓'),h('div',{style:{fontSize:'13px'}},'No pending actions'))),
+          h('div',{className:'card',style:{padding:'16px 18px'}},
+            h('div',{className:'h2',style:{marginBottom:'12px'}},'Recent platform activity'),
+            this.state.activity.map((a,i)=>h('div',{key:i,style:{display:'flex',gap:'11px',alignItems:'flex-start',padding:'7px 0'}},
+              h('div',{className:'av',style:{background:a.color,width:'30px',height:'30px',fontSize:'11px'}},a.init),
+              h('div',{style:{flex:1,fontSize:'13px',lineHeight:1.45}},h('b',null,a.who),' ',a.action,' ',h('span',{className:'rec-link',onClick:()=>this.openRecord(a.rec)},a.rec),h('div',{className:'sub',style:{fontSize:'11.5px',marginTop:'1px'}},a.time))))))));
+  }
+  fmt(d){ return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+
+  // ===== TEMPLATES WIZARD =====
+  templates(){ const h=React.createElement; const w=this.state.wizard;
+    const stepNames=['Choose template','Complete template','Review','Set access & submit','Done'];
+    const stepper=h('div',{className:'steps',style:{marginBottom:'26px'}}, stepNames.map((n,i)=>{ const num=i+1; const cls=w.step>num?'step done':w.step===num?'step on':'step';
+      return h('div',{key:i,className:cls,style:i===4?{flex:'0 0 auto'}:{}},
+        h('div',{className:'sn'},w.step>num?'✓':num), h('div',{className:'stx',style:{display:window.innerWidth<700?'none':'block'}},n),
+        i<4?h('div',{className:'bar'}):null); }));
+    let body;
+    if(w.step===1) body=this.wizStep1();
+    else if(w.step===2) body=this.wizStep2();
+    else if(w.step===3) body=this.wizStep3();
+    else if(w.step===4) body=this.wizStep4();
+    else body=this.wizStep5();
+    return h('div',{className:'wrap fade'},
+      h('div',{className:'h1',style:{marginBottom:'4px'}},'New experiment'),
+      h('div',{className:'sub',style:{marginBottom:'24px'}},'Capture and file your work in the unified database.'),
+      stepper, body);
+  }
+  wizDefs(){ return [
+    {type:'wetlab',title:'Wet-lab experiment',desc:'Bench assays, protocols, observations.',rec:true,gate:'wet'},
+    {type:'clinical',title:'Clinical-trial result',desc:'Cohorts, endpoints, outcomes.',rec:false,gate:'clinical'},
+    {type:'pcr',title:'PCR experiment',desc:'Primers, cycles, amplification.',rec:false,gate:'wet'},
+    {type:'sample',title:'Sample analysis',desc:'Characterisation, measurements.',rec:false,gate:null},
+    {type:'document',title:'Supporting document',desc:'SOPs, reports, references.',rec:false,gate:null},
+    {type:'import',title:'Data import',desc:'Bulk CSV or instrument export.',rec:false,gate:null},
+  ];}
+  wizStep1(){ const h=React.createElement;
+    const locked=(d)=>{ if(d.gate==='clinical'&&!this.hasClinical()) return true; if(d.gate==='wet'&&!this.hasWetlab()) return true; return false; };
+    return h('div',{},
+      h('div',{className:'h2',style:{marginBottom:'14px'}},'Choose a template'),
+      h('div',{className:'tgrid'}, this.wizDefs().map(d=>{ const lk=locked(d); const ic=this.TYPE_ICON()[d.type];
+        return h('button',{key:d.type,className:'tcard'+(lk?' lock':'')+(this.state.wizard.type===d.type?' sel':''),disabled:lk,onClick:()=>!lk&&this.setWiz({type:d.type})},
+          d.rec?h('span',{className:'badge s-approved',style:{position:'absolute',top:'14px',right:'14px',fontSize:'10.5px'}},'Recommended'):null,
+          lk?h('span',{style:{position:'absolute',top:'16px',right:'16px',fontSize:'16px'}},'🔒'):null,
+          h('div',{className:'tic',style:{background:ic[1]}},ic[0]),
+          h('div',{style:{fontWeight:700,fontSize:'15px'}},d.title),
+          h('div',{className:'sub',style:{fontSize:'12.5px',marginTop:'4px'}},d.desc),
+          lk?h('div',{style:{fontSize:'11.5px',color:'#B45309',marginTop:'8px',fontWeight:600}},'Requires '+(d.gate==='clinical'?'clinical':'wet-lab')+' access'):null); })),
+      h('div',{style:{display:'flex',justifyContent:'flex-end',marginTop:'24px'}},
+        h('button',{className:'btn btn-p',disabled:!this.state.wizard.type,onClick:()=>this.setWiz({step:2})},'Continue →')));
+  }
+  schemas(){ const ids=this.state.records.map(r=>r.id); return {
+    wetlab:[{k:'protocol',l:'Protocol used',t:'select',o:['Western Blot','ELISA','FACS','Cell viability','Other'],req:true},{k:'cellline',l:'Cell line or organism',t:'text'},{k:'reagents',l:'Reagents and materials',t:'area'},{k:'equipment',l:'Equipment used',t:'text'},{k:'observations',l:'Observations',t:'area'},{k:'resultsummary',l:'Result summary',t:'area',req:true},{k:'conclusion',l:'Conclusion',t:'area'}],
+    clinical:[{k:'studyid',l:'Study ID',t:'text',req:true},{k:'phase',l:'Phase',t:'select',o:['I','II','III','IV']},{k:'cohort',l:'Cohort ID',t:'text'},{k:'patients',l:'Patient count',t:'number'},{k:'primary',l:'Primary endpoint',t:'text',req:true},{k:'secondary',l:'Secondary endpoints',t:'area'},{k:'interim',l:'Interim or final result',t:'radio',o:['Interim','Final']},{k:'outcome',l:'Outcome summary',t:'area'},{k:'adverse',l:'Adverse events',t:'area'}],
+    pcr:[{k:'gene',l:'Target gene',t:'text',req:true},{k:'fwd',l:'Forward primer',t:'text'},{k:'rev',l:'Reverse primer',t:'text'},{k:'anneal',l:'Annealing temperature (°C)',t:'number'},{k:'cycles',l:'Cycle number',t:'number'},{k:'polymerase',l:'Polymerase used',t:'text'},{k:'band',l:'Expected band size (bp)',t:'number'},{k:'result',l:'Result',t:'select',o:['Positive','Negative','Inconclusive']},{k:'gel',l:'Gel image description',t:'area'},{k:'notes',l:'Notes',t:'area'}],
+    sample:[{k:'sampleid',l:'Sample ID',t:'text',req:true},{k:'sampletype',l:'Sample type',t:'select',o:['Tissue','Blood','Cell line','Organoid','Other']},{k:'collection',l:'Collection date',t:'date'},{k:'storage',l:'Storage condition',t:'text'},{k:'method',l:'Characterisation method',t:'text'},{k:'measurements',l:'Measurements',t:'area'},{k:'quality',l:'Quality score',t:'stars'},{k:'notes',l:'Notes',t:'area'}],
+    document:[{k:'doctype',l:'Document type',t:'select',o:['SOP','Report','Reference','Protocol','Regulatory submission'],req:true},{k:'author',l:'Author',t:'text'},{k:'version',l:'Version number',t:'text'},{k:'abstract',l:'Abstract',t:'area'},{k:'related',l:'Related experiments',t:'multi',o:ids}],
+    import:[{k:'uploaddesc',l:'Upload description',t:'text',req:true},{k:'instrument',l:'Instrument type',t:'text'},{k:'format',l:'File format',t:'select',o:['CSV','JSON','XML','XLSX']},{k:'points',l:'Number of data points',t:'number'},{k:'datasummary',l:'Data summary',t:'area'}],
+  };}
+  commonSchema(){ return [
+    {k:'title',l:'Experiment Title',t:'text',req:true},
+    {k:'project',l:'Project',t:'select',o:this.PROJECTS(),req:true},
+    {k:'researcher',l:'Researcher',t:'text',req:true,ro:true},
+    {k:'coinvest',l:'Co-investigators',t:'multi',o:this.PEOPLE()},
+    {k:'date',l:'Date of experiment',t:'date',req:true},
+    {k:'tags',l:'Tags',t:'text',ph:'comma, separated, tags'},
+  ];}
+  allFields(){ return [...this.commonSchema(),...(this.schemas()[this.state.wizard.type]||[])]; }
+  setForm(k,v){ this.setState(s=>({wizard:{...s.wizard,form:{...s.wizard.form,[k]:v}}})); }
+  setWiz(p){ this.setState(s=>({wizard:{...s.wizard,...p}})); }
+
+  fieldInput(fld){ const h=React.createElement; const w=this.state.wizard; let v=w.form[fld.k];
+    if(fld.k==='researcher') v=v||this.state.user.name;
+    const set=(val)=>this.setForm(fld.k,val);
+    if(fld.t==='text'||fld.t==='number'||fld.t==='date') return h('input',{className:'input',type:fld.t==='number'?'number':fld.t==='date'?'date':'text',value:v||'',placeholder:fld.ph||'',readOnly:fld.ro,style:fld.ro?{background:'var(--grey)'}:{},onChange:e=>set(e.target.value)});
+    if(fld.t==='area') return h('textarea',{className:'input',value:v||'',placeholder:fld.ph||'',onChange:e=>set(e.target.value)});
+    if(fld.t==='select') return h('select',{className:'input',value:v||'',onChange:e=>set(e.target.value)},h('option',{value:''},'Select…'),fld.o.map(o=>h('option',{key:o,value:o},o)));
+    if(fld.t==='radio') return h('div',{style:{display:'flex',gap:'10px'}},fld.o.map(o=>h('button',{key:o,className:'chip'+(v===o?' on':''),onClick:()=>set(o)},o)));
+    if(fld.t==='stars'){ const n=v||0; return h('div',{style:{display:'flex',gap:'3px'}},[1,2,3,4,5].map(i=>h('span',{key:i,className:'star'+(i<=n?' on':''),onClick:()=>set(i)},'★'))); }
+    if(fld.t==='multi'){ const arr=v||[]; return h('div',{style:{display:'flex',flexWrap:'wrap',gap:'7px'}},fld.o.map(o=>h('button',{key:o,className:'chip'+(arr.includes(o)?' on':''),onClick:()=>{ const na=arr.includes(o)?arr.filter(x=>x!==o):[...arr,o]; set(na); }},o))); }
+    return null;
+  }
+  filledCount(){ const flds=this.allFields(); let total=flds.length,done=0; flds.forEach(f=>{ let v=this.state.wizard.form[f.k]; if(f.k==='researcher') v=this.state.user.name; if(Array.isArray(v)?v.length:(v||v===0?String(v).length:0)) done++; }); return {done,total}; }
+  wizStep2(){ const h=React.createElement; const def=this.wizDefs().find(d=>d.type===this.state.wizard.type);
+    const {done,total}=this.filledCount(); const pct=Math.round(done/total*100);
+    const fieldEl=(f)=>h('div',{key:f.k,className:'field'},h('label',{className:'label'},f.l,f.req?h('span',{className:'req'},'*'):null),this.fieldInput(f));
+    return h('div',{},
+      h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'4px'}},
+        h('div',{className:'h2'},def.title+' details'),
+        h('div',{className:'sub',style:{fontWeight:600}},done+' of '+total+' fields completed')),
+      h('div',{className:'prog',style:{marginBottom:'22px'}},h('i',{style:{width:pct+'%'}})),
+      h('div',{className:'card',style:{padding:'22px 24px'}},
+        h('div',{style:{fontSize:'12px',fontWeight:700,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:'14px'}},'General information'),
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 22px'}},this.commonSchema().map(fieldEl)),
+        h('div',{style:{height:'1px',background:'var(--line)',margin:'8px 0 18px'}}),
+        h('div',{style:{fontSize:'12px',fontWeight:700,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:'14px'}},def.title+' fields'),
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 22px'}},(this.schemas()[this.state.wizard.type]||[]).map(f=>h('div',{key:f.k,className:'field',style:(f.t==='area')?{gridColumn:'1 / -1'}:{}},h('label',{className:'label'},f.l,f.req?h('span',{className:'req'},'*'):null),this.fieldInput(f))))),
+      h('div',{style:{display:'flex',justifyContent:'space-between',marginTop:'22px'}},
+        h('button',{className:'btn btn-o',onClick:()=>this.setWiz({step:1})},'← Back'),
+        h('button',{className:'btn btn-p',onClick:()=>this.setWiz({step:3})},'Review →')));
+  }
+  wizStep3(){ const h=React.createElement; const flds=this.allFields(); const f=this.state.wizard.form;
+    const val=(fl)=>{ let v=fl.k==='researcher'?this.state.user.name:f[fl.k]; if(Array.isArray(v)) v=v.join(', '); if(fl.t==='stars'&&v) v='★'.repeat(v); return v; };
+    return h('div',{},
+      h('div',{className:'h2',style:{marginBottom:'4px'}},'Review your entry'),
+      h('div',{className:'sub',style:{marginBottom:'18px'}},'Check everything is correct before uploading. Empty fields are highlighted.'),
+      h('div',{className:'card',style:{padding:'22px 26px'}},
+        h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'18px 32px'}},flds.map(fl=>{ const v=val(fl); const empty=!(Array.isArray(f[fl.k])?f[fl.k].length:(v||v===0));
+          return h('div',{key:fl.k}, h('div',{style:{fontSize:'11.5px',fontWeight:600,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.3px',marginBottom:'3px'}},fl.l),
+            h('div',{style:{fontSize:'14px',color:empty?'#C0392B':'var(--ink)',fontStyle:empty?'italic':'normal'}},empty?'— empty —':v)); }))),
+      h('div',{style:{display:'flex',justifyContent:'space-between',marginTop:'22px'}},
+        h('button',{className:'btn btn-o',onClick:()=>this.setWiz({step:2})},'← Edit'),
+        h('button',{className:'btn btn-p',onClick:()=>this.setWiz({step:4})},'Confirm and upload →')));
+  }
+  wizStep4(){ const h=React.createElement; const w=this.state.wizard;
+    const opt=(group,val,label,desc)=>h('button',{key:val,className:'lrow',style:{border:'1.5px solid '+(w[group]===val?'var(--teal)':'var(--line)'),borderRadius:'11px',marginBottom:'10px',width:'100%',background:w[group]===val?'#f1fbf9':'#fff',boxShadow:w[group]===val?'0 0 0 3px rgba(0,168,150,.12)':'none'},onClick:()=>this.setWiz({[group]:val})},
+      h('div',{style:{width:'18px',height:'18px',borderRadius:'50%',border:'2px solid '+(w[group]===val?'var(--teal)':'#c5cbda'),display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}},w[group]===val?h('div',{style:{width:'9px',height:'9px',borderRadius:'50%',background:'var(--teal)'}}):null),
+      h('div',{style:{flex:1}}, h('div',{style:{fontWeight:600,fontSize:'13.5px'}},label), h('div',{className:'sub',style:{fontSize:'12px'}},desc)));
+    return h('div',{},
+      h('div',{className:'two-col',style:{display:'flex',gap:'20px'}},
+        h('div',{style:{flex:1}}, h('div',{className:'h2',style:{marginBottom:'14px'}},'Access level'),
+          opt('access','private','Private (only me)','Only you can view this record.'),
+          opt('access','project','Project team','Visible to everyone on the project.'),
+          opt('access','all','All ALK researchers','Anyone in R&D can find and view it.'),
+          opt('access','public','Public (management visible)','Included in management dashboards.')),
+        h('div',{style:{flex:1}}, h('div',{className:'h2',style:{marginBottom:'14px'}},'Approval workflow'),
+          opt('workflow','none','No review needed','Saved directly as your record.'),
+          opt('workflow','peer','Request peer review','A colleague reviews before approval.'),
+          opt('workflow','manager','Requires manager sign-off','Routed to management for approval.'))),
+      h('div',{style:{display:'flex',justifyContent:'space-between',marginTop:'24px'}},
+        h('button',{className:'btn btn-o',onClick:()=>this.setWiz({step:3})},'← Back'),
+        h('button',{className:'btn btn-p',disabled:w.submitting,style:{minWidth:'130px'},onClick:()=>this.submitRecord()},w.submitting?h('span',{className:'spin'}):'Submit')));
+  }
+  submitRecord(){ this.setWiz({submitting:true});
+    setTimeout(()=>{ const f=this.state.wizard.form; const w=this.state.wizard;
+      // generate id
+      let n=13; const existing=new Set(this.state.records.map(r=>r.id)); while(existing.has('EXP-2026-'+String(n).padStart(3,'0'))) n++;
+      const id='EXP-2026-'+String(n).padStart(3,'0');
+      const statusMap={none:'In Progress',peer:'Under Review',manager:'Under Review'};
+      const accMap={private:'Private (only me)',project:'Project team',all:'All ALK researchers',public:'Public (management visible)'};
+      const meta=(this.schemas()[w.type]||[]).slice(0,4).map(fl=>[fl.l,(Array.isArray(f[fl.k])?f[fl.k].join(', '):f[fl.k])||'—']);
+      const rec={id,title:f.title||'Untitled experiment',type:w.type,researcher:this.state.user.short,date:f.date||new Date().toISOString().slice(0,10),
+        project:f.project||'—',sample:f.sampleid||f.sample||'—',status:statusMap[w.workflow],access:accMap[w.access],
+        tags:(f.tags||'').split(',').map(t=>t.trim()).filter(Boolean),meta,desc:f.resultsummary||f.outcome||f.datasummary||f.abstract||f.notes||'No description provided.',
+        files:[],relatedIds:f.related||[],reviewerId:null,comments:[],_new:true};
+      this.setState(s=>({records:[rec,...s.records],
+        activity:[{who:this.state.user.short,init:this.state.user.initials,color:this.state.user.color,action:'uploaded',rec:id,time:'just now'},...s.activity].slice(0,5),
+        audit:[{time:this.nowStamp(),user:this.state.user.short,action:'Uploaded record',rec:id},...s.audit],
+        wizard:{...s.wizard,submitting:false,step:5,newId:id}}));
+      this.toast('Record '+id+' uploaded');
+    },1500);
+  }
+  wizStep5(){ const h=React.createElement; const id=this.state.wizard.newId; const r=this.rec(id);
+    return h('div',{className:'fade',style:{maxWidth:'560px',margin:'10px auto',textAlign:'center'}},
+      h('div',{style:{width:'72px',height:'72px',borderRadius:'50%',background:'#E3F6EC',color:'#108043',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'34px',margin:'10px auto 18px'}},'✓'),
+      h('div',{className:'h1',style:{fontSize:'22px'}},'Record saved to unified database'),
+      h('div',{className:'sub',style:{marginTop:'6px'}},'Your experiment is now searchable across ALK Atlas.'),
+      h('div',{className:'card',style:{padding:'20px',marginTop:'22px',textAlign:'left'}},
+        h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center'}},
+          h('span',{className:'mono',style:{fontSize:'15px',fontWeight:600,color:'var(--teal)'}},id),this.badge(r.status)),
+        h('div',{style:{fontWeight:700,fontSize:'16px',margin:'10px 0 4px'}},r.title),
+        h('div',{className:'sub'},this.TYPES()[r.type]+' · '+r.project+' · '+r.researcher)),
+      h('div',{style:{display:'flex',gap:'12px',justifyContent:'center',marginTop:'24px'}},
+        h('button',{className:'btn btn-p',onClick:()=>{ this.openRecord(id); }},'View record'),
+        h('button',{className:'btn btn-o',onClick:()=>{ this.setState({wizard:{step:1,type:null,form:{},access:'project',workflow:'peer',submitting:false,newId:null}}); }},'Upload another experiment')));
+  }
+
+  // ===== DATABASE =====
+  setFilter(k,v){ this.setState(s=>({filters:{...s.filters,[k]:v}})); }
+  sortBy(k){ this.setState(s=>({sortKey:k,sortDir:s.sortKey===k&&s.sortDir==='asc'?'desc':'asc'})); }
+  filteredRecords(){ const f=this.state.filters; let recs=this.visibleRecords().filter(r=>
+    (!f.project||r.project===f.project)&&(!f.type||r.type===f.type)&&(!f.researcher||r.researcher===f.researcher)&&(!f.status||r.status===f.status));
+    const k=this.state.sortKey,dir=this.state.sortDir==='asc'?1:-1;
+    recs=[...recs].sort((a,b)=>{ let av=a[k],bv=b[k]; if(k==='type'){av=this.TYPES()[a.type];bv=this.TYPES()[b.type];} return av<bv?-1*dir:av>bv?1*dir:0; });
+    return recs; }
+  database(){ const h=React.createElement; const recs=this.filteredRecords(); const f=this.state.filters;
+    const fopt=(k,label,opts)=>h('select',{className:'input',style:{width:'auto',minWidth:'130px',height:'36px',padding:'0 30px 0 12px',fontSize:'13px'},value:f[k],onChange:e=>this.setFilter(k,e.target.value)},
+      h('option',{value:''},label),opts.map(o=>h('option',{key:o,value:o},o)));
+    const arrow=(k)=>this.state.sortKey===k?(this.state.sortDir==='asc'?' ↑':' ↓'):'';
+    const cols=[['title','Experiment'],['type','Type'],['project','Project'],['researcher','Researcher'],['date','Date'],['sample','Sample'],['status','Status'],['files','Files'],['','']];
+    return h('div',{className:'wrap fade'},
+      h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'10px',marginBottom:'18px'}},
+        h('div',{}, h('div',{className:'h1'},'Unified research database'), h('div',{className:'sub',style:{marginTop:'4px'}},recs.length+' records'+(this.state.user.id==='coordinator'?' visible to you':''))),
+        h('div',{style:{display:'flex',gap:'10px'}},
+          recs.length?h('button',{className:'btn btn-o',onClick:()=>this.openPrint(recs.map(r=>r.id))},h('span',null,'🖨'),'Print tags'):null,
+          this.canUpload()?h('button',{className:'btn btn-p',onClick:()=>this.nav('templates')},h('span',{style:{fontSize:'16px'}},'＋'),'Upload'):null)),
+      h('div',{className:'card',style:{padding:'12px 14px',marginBottom:'16px',display:'flex',gap:'10px',flexWrap:'wrap',alignItems:'center'}},
+        h('span',{style:{fontSize:'12px',fontWeight:700,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.4px'}},'Filter'),
+        fopt('project','All projects',this.PROJECTS()),
+        h('select',{className:'input',style:{width:'auto',minWidth:'130px',height:'36px',padding:'0 30px 0 12px',fontSize:'13px'},value:f.type,onChange:e=>this.setFilter('type',e.target.value)},h('option',{value:''},'All types'),Object.entries(this.TYPES()).map(([k,v])=>h('option',{key:k,value:k},v))),
+        fopt('researcher','All researchers',[...new Set(this.state.records.map(r=>r.researcher))]),
+        fopt('status','All statuses',['Approved','Under Review','In Progress','Draft','Rejected']),
+        (f.project||f.type||f.researcher||f.status)?h('button',{className:'btn-g',style:{fontSize:'12.5px',fontWeight:600},onClick:()=>this.setState({filters:{project:'',type:'',researcher:'',status:'',date:''}})},'Clear'):null),
+      recs.length?h('div',{className:'card',style:{overflow:'hidden'}},h('div',{style:{overflowX:'auto'}},
+        h('table',{className:'tbl'},
+          h('thead',null,h('tr',null,cols.map(([k,l],i)=>h('th',{key:i,onClick:k?()=>this.sortBy(k):null,style:k?{}:{cursor:'default'}},l+(k?arrow(k):''))))),
+          h('tbody',null,recs.map(r=>h('tr',{key:r.id},
+            h('td',null,h('div',{className:'rec-t',onClick:()=>this.openRecord(r.id)},r.title),h('div',{className:'rec-id mono'},r.id)),
+            h('td',null,this.tyBadge(r.type)),
+            h('td',null,r.project),
+            h('td',null,r.researcher),
+            h('td',null,this.fmt(r.date)),
+            h('td',null,h('span',{className:'mono',style:{fontSize:'12px'}},r.sample)),
+            h('td',null,this.badge(r.status)),
+            h('td',null,h('span',{style:{display:'inline-flex',alignItems:'center',gap:'5px',color:'var(--mut)'}},'📎 '+r.files.length)),
+            h('td',null,this.rowMenu(r))
+          )))))):this.emptyState('No records match these filters','Try clearing the filter bar above.'));
+  }
+  rowMenu(r){ const h=React.createElement; const open=this.state.params.menu===r.id&&this.state.page==='database';
+    const items=[['View record',()=>this.openRecord(r.id)]];
+    if(r.researcher===this.state.user.short&&!this.isReadOnly()) items.push(['Edit',()=>this.toast('Opening editor (demo)')]);
+    items.push(['Download',()=>this.toast('Downloading '+r.id+' (demo)')],['Share',()=>this.toast('Share link copied')],['Print barcode tag',()=>this.openPrint([r.id])]);
+    if(!this.isReadOnly()) items.push(['Request review',()=>this.openModal('submit',r.id)]);
+    items.push(['Archive',()=>this.toast(r.id+' archived')]);
+    return h('div',{style:{position:'relative'}},
+      h('button',{style:{width:'30px',height:'30px',borderRadius:'7px',fontSize:'17px',color:'var(--mut)'},onClick:(e)=>{e.stopPropagation();this.setState(s=>({params:{...s.params,menu:open?null:r.id}}));}},'⋯'),
+      open?h('div',{className:'menu',style:{width:'170px',top:'34px'}},items.map(([l,fn],i)=>h('button',{key:i,className:'menu-i',style:{fontSize:'13px'},onClick:(e)=>{e.stopPropagation();this.setState(s=>({params:{...s.params,menu:null}}));fn();}},l))):null);
+  }
+
+  // ===== RECORD DETAIL =====
+  record(){ const h=React.createElement; const r=this.rec(this.state.params.id);
+    if(!r) return this.emptyState('Record not found','It may have been archived or removed.');
+    const u=this.state.user; const tl=this.buildTimeline(r);
+    const restricted=u.id==='coordinator'&&(r.type==='wetlab'||r.type==='pcr')&&!r.shared&&r.access!=='All ALK researchers';
+    // action button
+    let actionBtn=null;
+    if(r.researcher===u.short&&(r.status==='Draft'||r.status==='In Progress')&&!this.isReadOnly())
+      actionBtn=h('button',{className:'btn btn-p',style:{width:'100%'},onClick:()=>this.openModal('submit',r.id)},'Submit for review');
+    else if(r.status==='Under Review'&&r.reviewerId===u.id)
+      actionBtn=h('div',{style:{display:'flex',gap:'8px'}},h('button',{className:'btn btn-p',style:{flex:1},onClick:()=>this.openModal('esign',r.id)},'Approve & sign'),h('button',{className:'btn btn-o',style:{flex:1},onClick:()=>this.openModal('changes',r.id)},'Request changes'));
+    else if(u.id==='management') actionBtn=h('button',{className:'btn btn-o',style:{width:'100%'},onClick:()=>this.toast('Approval history (demo)')},'View approval history');
+    else if(u.id==='it') actionBtn=h('button',{className:'btn btn-o',style:{width:'100%'},onClick:()=>this.nav('admin',{tab:'audit'})},'View audit log');
+    return h('div',{className:'wrap fade'},
+      h('button',{className:'btn-g',style:{fontSize:'13px',fontWeight:600,marginBottom:'14px',padding:0},onClick:()=>this.nav('database')},'← Back to database'),
+      h('div',{className:'two-col',style:{display:'flex',gap:'22px'}},
+        // LEFT 70
+        h('div',{style:{flex:'2.4',minWidth:0}},
+          h('div',{style:{display:'flex',gap:'10px',alignItems:'center',marginBottom:'8px',flexWrap:'wrap'}},this.tyBadge(r.type),h('span',{className:'mono',style:{fontSize:'12.5px',color:'var(--mut)'}},r.id),this.badge(r.status)),
+          h('div',{className:'h1',style:{fontSize:'22px',marginBottom:'18px'}},r.title),
+          h('div',{className:'card',style:{padding:'22px 24px',marginBottom:'18px'}},
+            h('div',{style:{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'16px 32px'}},
+              [['Project',r.project],['Researcher',r.researcher],['Date',this.fmt(r.date)],['Sample',r.sample],...r.meta].map(([k,v],i)=>h('div',{key:i},
+                h('div',{style:{fontSize:'11.5px',fontWeight:600,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.3px',marginBottom:'3px'}},k),
+                h('div',{style:{fontSize:'14px'}},v))))),
+          h('div',{className:'card',style:{padding:'22px 24px',marginBottom:'18px'}},
+            h('div',{className:'h2',style:{marginBottom:'10px'}},'Description / Notes'),
+            h('div',{style:{fontSize:'14px',lineHeight:1.65,color:'#39415a'}},r.desc)),
+          h('div',{className:'card',style:{padding:'22px 24px',marginBottom:'18px'}},
+            h('div',{className:'h2',style:{marginBottom:'12px'}},'Files attached'),
+            restricted?h('div',{style:{padding:'16px',background:'#FEF1DC',borderRadius:'10px',color:'#92400E',fontSize:'13.5px'}},'🔒 Wet-lab raw data is restricted. Request access from the record owner to view attached files.'):
+            (r.files.length?r.files.map((f,i)=>h('div',{key:i,style:{display:'flex',alignItems:'center',gap:'12px',padding:'11px 0',borderBottom:i<r.files.length-1?'1px solid var(--line)':'none'}},
+              h('div',{style:{width:'36px',height:'36px',borderRadius:'8px',background:'var(--grey)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'15px'}},'📄'),
+              h('div',{style:{flex:1}},h('div',{style:{fontWeight:600,fontSize:'13.5px'}},f.name),h('div',{className:'sub',style:{fontSize:'12px'}},f.type+' · uploaded '+this.fmt(f.date))),
+              h('button',{className:'btn btn-o btn-sm',onClick:()=>this.toast('Downloading '+f.name)},'Download'))):h('div',{className:'sub',style:{fontSize:'13px'}},'No files attached yet.'))),
+          // barcode label
+          h('div',{className:'card',style:{padding:'22px 24px',marginBottom:'18px'}},
+            h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:'12px',flexWrap:'wrap'}},
+              h('div',{},h('div',{className:'h2',style:{marginBottom:'4px'}},'Barcode label'),h('div',{className:'sub',style:{fontSize:'12.5px',maxWidth:'320px'}},'Print this tag and paste it on the corresponding samples, plates or freezer boxes in the lab.')),
+              h('button',{className:'btn btn-d btn-sm',onClick:()=>this.openPrint([r.id])},'🖨  Print tag')),
+            h('div',{style:{marginTop:'16px'}},this.tagEl(r))),
+          // comments
+          h('div',{className:'card',style:{padding:'22px 24px'}},
+            h('div',{className:'h2',style:{marginBottom:'4px'}},'Comments & review thread'),
+            h('div',{className:'sub',style:{fontSize:'12.5px',marginBottom:'8px'}},r.comments.length+' comments'),
+            r.comments.map((c,i)=>h('div',{key:i,className:'cmt'},h('div',{className:'cav',style:{background:c.color}},c.initials),
+              h('div',{style:{flex:1}},h('div',{style:{display:'flex',gap:'8px',alignItems:'baseline'}},h('b',{style:{fontSize:'13.5px'}},c.author),h('span',{className:'sub',style:{fontSize:'11.5px'}},c.time)),
+                h('div',{style:{fontSize:'13.5px',marginTop:'3px',lineHeight:1.5}},c.text)))),
+            h('div',{style:{display:'flex',gap:'10px',marginTop:'14px'}},
+              h('div',{className:'cav',style:{background:u.color,width:'32px',height:'32px',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:700,fontSize:'12px',borderRadius:'50%'}},u.initials),
+              h('div',{style:{flex:1,display:'flex',gap:'8px'}},
+                h('input',{className:'input',placeholder:'Add a comment…',value:this.state.commentDraft[r.id]||'',onChange:e=>this.setState(s=>({commentDraft:{...s.commentDraft,[r.id]:e.target.value}})),onKeyDown:e=>{if(e.key==='Enter')this.addComment(r.id);}}),
+                h('button',{className:'btn btn-p',onClick:()=>this.addComment(r.id)},'Send'))))),
+        // RIGHT 30
+        h('div',{style:{flex:'1',minWidth:'250px'}},
+          h('div',{className:'card',style:{padding:'20px',marginBottom:'16px'}},
+            h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'16px'}},h('div',{className:'h2',style:{fontSize:'15px'}},'Status'),this.badge(r.status)),
+            h('div',{className:'tl'},tl.map((t,i)=>h('div',{key:i,className:'tl-i',style:{color:this.statusColor(t.status)}},
+              h('div',{className:'tl-dot',style:{background:i===tl.length-1?this.statusColor(t.status):'#fff'}}),
+              h('div',{style:{paddingTop:'0px'}},h('div',{style:{fontSize:'13.5px',fontWeight:600,color:'var(--ink)'}},t.status),
+                h('div',{className:'sub',style:{fontSize:'11.5px'}},this.fmt(t.date)+' · '+t.actor))))),
+            actionBtn?h('div',{style:{marginTop:'16px'}},actionBtn):null),
+          r.signature?h('div',{className:'card',style:{padding:'0',marginBottom:'16px',overflow:'hidden'}},
+            h('div',{className:'sigbox',style:{borderRadius:0,border:'none'}},
+              h('div',{style:{display:'flex',alignItems:'center',gap:'8px',color:'#108043',fontWeight:700,fontSize:'13px',marginBottom:'8px'}},h('span',null,'✔'),'Electronically signed'),
+              h('div',{className:'sigpad',style:{fontSize:'18px',marginBottom:'8px',background:'#fff'}},r.signature.by),
+              h('div',{style:{fontSize:'11.5px',color:'#3d6b4f',lineHeight:1.5}},r.signature.role,h('br'),r.signature.time,' · ',h('span',{className:'mono'},r.signature.id)))):null,
+          h('div',{className:'card',style:{padding:'20px'}},
+            [['Access level',r.access],['Approval required from',r.signature?('Signed by '+r.signature.byShort):(r.reviewerId?this.USERS()[r.reviewerId].name:'—')]].map(([k,v],i)=>h('div',{key:i,style:{marginBottom:'14px'}},
+              h('div',{style:{fontSize:'11.5px',fontWeight:600,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.3px',marginBottom:'3px'}},k),h('div',{style:{fontSize:'13.5px'}},v))),
+            r.relatedIds.length?h('div',{style:{marginBottom:'14px'}},h('div',{style:{fontSize:'11.5px',fontWeight:600,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.3px',marginBottom:'5px'}},'Related experiments'),
+              h('div',{style:{display:'flex',flexDirection:'column',gap:'4px'}},r.relatedIds.map(id=>h('span',{key:id,className:'rec-link',onClick:()=>this.openRecord(id)},'→ '+id)))):null,
+            h('div',{},h('div',{style:{fontSize:'11.5px',fontWeight:600,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.3px',marginBottom:'6px'}},'Tags'),
+              h('div',{style:{display:'flex',flexWrap:'wrap',gap:'6px'}},r.tags.length?r.tags.map(t=>h('span',{key:t,style:{fontSize:'12px',background:'var(--grey)',padding:'3px 9px',borderRadius:'20px',color:'#4a5268'}},t)):h('span',{className:'sub',style:{fontSize:'12px'}},'No tags'))))))
+    );
+  }
+  addComment(id){ const txt=(this.state.commentDraft[id]||'').trim(); if(!txt) return; const u=this.state.user;
+    this.setState(s=>({records:s.records.map(r=>r.id===id?{...r,comments:[...r.comments,{author:u.name,initials:u.initials,color:u.color,time:'just now',text:txt}]}:r),
+      commentDraft:{...s.commentDraft,[id]:''},
+      audit:[{time:this.nowStamp(),user:u.short,action:'Added comment',rec:id},...s.audit]}));
+    this.toast('Comment added'); }
+  confirmEsign(){ const m=this.state.modal; const u=this.state.user; const id=m.recordId;
+    const sigId='SIG-'+Date.now().toString().slice(-6);
+    const stamp=this.nowStamp();
+    const signature={by:u.name,byShort:u.short,role:u.role,time:stamp,id:sigId};
+    this.setState(s=>({records:s.records.map(r=>r.id===id?{...r,status:'Approved',reviewerId:null,signature,
+        comments:[...r.comments,{author:u.name,initials:u.initials,color:u.color,time:'just now',text:'✔ Electronically signed and approved. Signature '+sigId+'.'}]}:r),
+      activity:[{who:u.short,init:u.initials,color:u.color,action:'electronically signed & approved',rec:id,time:'just now'},...s.activity].slice(0,5),
+      audit:[{time:stamp,user:u.short,action:'Electronically signed & approved ('+sigId+')',rec:id},...s.audit],modal:null}));
+    this.toast(id+' approved — electronically signed'); }
+
+  // ===== MODALS =====
+  openModal(type,recordId){ this.setState({modal:{type,recordId,reviewer:'',message:''}}); }
+  closeModal(){ this.setState({modal:null}); }
+  setModal(p){ this.setState(s=>({modal:{...s.modal,...p}})); }
+  modalLayer(){ const h=React.createElement; const m=this.state.modal; if(!m) return null; const r=this.rec(m.recordId);
+    const colleagues=Object.values(this.USERS()).filter(x=>x.short!==this.state.user.short);
+    if(m.type==='submit') return h('div',{className:'ov',onClick:()=>this.closeModal()},
+      h('div',{className:'modal',onClick:e=>e.stopPropagation()},
+        h('div',{className:'modal-h'},h('div',{className:'h2'},'Submit for review'),h('div',{className:'sub',style:{fontSize:'13px',marginTop:'3px'}},r.title)),
+        h('div',{className:'modal-b'},
+          h('div',{className:'field'},h('label',{className:'label'},'Select a reviewer',h('span',{className:'req'},'*')),
+            h('select',{className:'input',value:m.reviewer,onChange:e=>this.setModal({reviewer:e.target.value})},h('option',{value:''},'Choose a colleague…'),colleagues.map(c=>h('option',{key:c.id,value:c.id},c.name+' — '+c.role)))),
+          h('div',{className:'field'},h('label',{className:'label'},'Message (optional)'),h('textarea',{className:'input',placeholder:'Add context for your reviewer…',value:m.message,onChange:e=>this.setModal({message:e.target.value})}))),
+        h('div',{className:'modal-f'},h('button',{className:'btn btn-o',onClick:()=>this.closeModal()},'Cancel'),
+          h('button',{className:'btn btn-p',disabled:!m.reviewer,onClick:()=>this.confirmSubmit()},'Send for review'))));
+    if(m.type==='changes') return h('div',{className:'ov',onClick:()=>this.closeModal()},
+      h('div',{className:'modal',onClick:e=>e.stopPropagation()},
+        h('div',{className:'modal-h'},h('div',{className:'h2'},'Request changes'),h('div',{className:'sub',style:{fontSize:'13px',marginTop:'3px'}},r.title)),
+        h('div',{className:'modal-b'},h('div',{className:'field'},h('label',{className:'label'},'Describe the required changes',h('span',{className:'req'},'*')),
+          h('textarea',{className:'input',style:{minHeight:'110px'},placeholder:'What needs to be revised before approval?',value:m.message,onChange:e=>this.setModal({message:e.target.value})}))),
+        h('div',{className:'modal-f'},h('button',{className:'btn btn-o',onClick:()=>this.closeModal()},'Cancel'),
+          h('button',{className:'btn btn-d',disabled:!m.message.trim(),onClick:()=>this.confirmChanges()},'Send & revert to In Progress'))));
+    if(m.type==='esign'){ const u=this.state.user; const nameOk=(m.signName||'').trim().toLowerCase()===u.name.toLowerCase(); const passOk=(m.signPass||'').length>0;
+      return h('div',{className:'ov',onClick:()=>this.closeModal()},
+        h('div',{className:'modal',onClick:e=>e.stopPropagation()},
+          h('div',{className:'modal-h'},h('div',{className:'h2'},'Electronic signature'),h('div',{className:'sub',style:{fontSize:'13px',marginTop:'3px'}},'Approve '+r.id+' — '+r.title)),
+          h('div',{className:'modal-b'},
+            h('div',{style:{fontSize:'13px',color:'#39415a',lineHeight:1.55,marginBottom:'14px'}},'You are about to approve this record under your ALK Atlas credentials. Your electronic signature is legally equivalent to a handwritten signature and will be recorded in the audit log.'),
+            h('div',{className:'field'},h('label',{className:'label'},'Signed in as'),
+              h('div',{style:{display:'flex',alignItems:'center',gap:'10px',padding:'8px 0'}},h('div',{className:'av',style:{background:u.color,width:'34px',height:'34px',fontSize:'12px'}},u.initials),h('div',null,h('div',{style:{fontWeight:600,fontSize:'13.5px'}},u.name),h('div',{className:'sub',style:{fontSize:'12px'}},u.role)))),
+            h('div',{className:'field'},h('label',{className:'label'},'Type your full name to sign',h('span',{className:'req'},'*')),
+              h('input',{className:'input',placeholder:u.name,value:m.signName||'',onChange:e=>this.setModal({signName:e.target.value})}),
+              (m.signName&&!nameOk)?h('div',{style:{fontSize:'11.5px',color:'#DC2626',marginTop:'4px'}},'Name must match your account exactly.'):null),
+            (m.signName&&nameOk)?h('div',{className:'sigpad',style:{marginBottom:'14px'}},m.signName):null,
+            h('div',{className:'field'},h('label',{className:'label'},'Confirm password',h('span',{className:'req'},'*')),
+              h('input',{className:'input',type:'password',placeholder:'••••••••',value:m.signPass||'',onChange:e=>this.setModal({signPass:e.target.value})}))),
+          h('div',{className:'modal-f'},h('button',{className:'btn btn-o',onClick:()=>this.closeModal()},'Cancel'),
+            h('button',{className:'btn btn-p',disabled:!(nameOk&&passOk),onClick:()=>this.confirmEsign()},'✔ Sign & approve'))));
+    }
+    return null;
+  }
+  confirmSubmit(){ const m=this.state.modal; const u=this.state.user;
+    this.setState(s=>({records:s.records.map(r=>r.id===m.recordId?{...r,status:'Under Review',reviewerId:m.reviewer,comments:m.message?[...r.comments,{author:u.name,initials:u.initials,color:u.color,time:'just now',text:'Submitted for review: '+m.message}]:r.comments}:r),
+      activity:[{who:u.short,init:u.initials,color:u.color,action:'submitted for review',rec:m.recordId,time:'just now'},...s.activity].slice(0,5),
+      audit:[{time:this.nowStamp(),user:u.short,action:'Submitted for review',rec:m.recordId},...s.audit],modal:null}));
+    this.toast('Sent to '+this.USERS()[m.reviewer].short+' for review'); }
+  confirmChanges(){ const m=this.state.modal; const u=this.state.user;
+    this.setState(s=>({records:s.records.map(r=>r.id===m.recordId?{...r,status:'In Progress',reviewerId:null,comments:[...r.comments,{author:u.name,initials:u.initials,color:u.color,time:'just now',text:'Changes requested: '+m.message}]}:r),
+      audit:[{time:this.nowStamp(),user:u.short,action:'Requested changes',rec:m.recordId},...s.audit],modal:null}));
+    this.toast('Changes requested — reverted to In Progress'); }
+
+  // ===== SEARCH =====
+  setSearch(q){ this.setState({searchQuery:q}); }
+  searchMatch(q){ q=q.toLowerCase().trim(); if(!q) return []; return this.visibleRecords().filter(r=>
+    r.title.toLowerCase().includes(q)||r.researcher.toLowerCase().includes(q)||r.project.toLowerCase().includes(q)||
+    (r.sample||'').toLowerCase().includes(q)||this.TYPES()[r.type].toLowerCase().includes(q)||r.id.toLowerCase().includes(q)||
+    (r.tags||[]).some(t=>t.toLowerCase().includes(q))); }
+  search(){ const h=React.createElement; const q=this.state.searchQuery; const results=this.searchMatch(q);
+    const chips=['SLIT dose response','PCR allergy study','Experiments from May 2026','Uploaded by L. Hoffmann'];
+    const resRow=(r)=>h('div',{key:r.id,className:'lrow',onClick:()=>this.openRecord(r.id)},
+      h('div',{className:'tic',style:{width:'38px',height:'38px',fontSize:'16px',margin:0,background:this.TYPE_ICON()[r.type][1]}},this.TYPE_ICON()[r.type][0]),
+      h('div',{style:{flex:1,minWidth:0}},h('div',{style:{fontWeight:600,fontSize:'13.5px'}},r.title),
+        h('div',{style:{display:'flex',gap:'8px',alignItems:'center',marginTop:'3px'}},this.tyBadge(r.type),h('span',{className:'mono',style:{fontSize:'11px',color:'var(--mut)'}},r.id),h('span',{className:'sub',style:{fontSize:'12px'}},r.researcher+' · '+this.fmt(r.date)))),
+      this.badge(r.status));
+    const fileResults=q.trim()?this.visibleRecords().flatMap(r=>r.files.filter(f=>f.name.toLowerCase().includes(q.toLowerCase())).map(f=>({...f,rec:r}))):[];
+    return h('div',{className:'wrap fade'},
+      h('div',{className:'h1',style:{marginBottom:'16px'}},'Search the database'),
+      h('input',{className:'bigsearch',autoFocus:true,placeholder:'Search experiments, researchers, samples, tags…',value:q,onChange:e=>this.setSearch(e.target.value)}),
+      h('div',{style:{display:'flex',gap:'8px',flexWrap:'wrap',marginTop:'14px'}},chips.map(c=>h('button',{key:c,className:'chip',onClick:()=>this.setSearch(c)},c))),
+      !q.trim()?h('div',{className:'empty',style:{paddingTop:'46px'}},h('div',{className:'eic'},'⌕'),h('div',{style:{fontWeight:600,color:'var(--ink)'}},'Start typing to search'),h('div',{style:{fontSize:'13px',marginTop:'4px'}},'Matches titles, researchers, tags, projects, samples and types.')):
+      (results.length||fileResults.length)?h('div',{style:{marginTop:'22px'}},
+        h('div',{className:'card',style:{padding:'8px 10px',marginBottom:'16px'}},
+          h('div',{style:{fontSize:'12px',fontWeight:700,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.4px',padding:'8px 8px 6px'}},'Records ('+results.length+')'),
+          results.length?results.map(resRow):h('div',{className:'sub',style:{padding:'10px'}},'No matching records.')),
+        fileResults.length?h('div',{className:'card',style:{padding:'8px 10px'}},
+          h('div',{style:{fontSize:'12px',fontWeight:700,color:'var(--mut)',textTransform:'uppercase',letterSpacing:'.4px',padding:'8px 8px 6px'}},'Files ('+fileResults.length+')'),
+          fileResults.map((f,i)=>h('div',{key:i,className:'lrow',onClick:()=>this.openRecord(f.rec.id)},h('div',{style:{width:'34px',height:'34px',borderRadius:'8px',background:'var(--grey)',display:'flex',alignItems:'center',justifyContent:'center'}},'📄'),
+            h('div',{style:{flex:1}},h('div',{style:{fontWeight:600,fontSize:'13px'}},f.name),h('div',{className:'sub',style:{fontSize:'12px'}},f.type+' · '+f.rec.id))))):null):
+      h('div',{className:'empty',style:{paddingTop:'40px'}},h('div',{className:'eic'},'🔍'),h('div',{style:{fontWeight:600,color:'var(--ink)'}},'No records found for "'+q+'"'),h('div',{style:{fontSize:'13px',marginTop:'4px'}},'Try the chatbot for a broader search.'),h('button',{className:'btn btn-p',style:{marginTop:'14px'},onClick:()=>this.nav('chatbot')},'Ask the assistant')));
+  }
+
+  // ===== CHATBOT =====
+  chatbot(){ const h=React.createElement; const u=this.state.user;
+    const msgs=this.state.chat.map((m,i)=>{ if(m.role==='u') return h('div',{key:i,className:'msg u'},h('div',{className:'mav',style:{background:u.color}},u.initials),h('div',{className:'bub'},m.text));
+      const c=this.botContent(m.q);
+      return h('div',{key:i,className:'msg b'},h('div',{className:'mav',style:{background:'var(--navy)'}},'✦'),
+        h('div',{},h('div',{className:'bub'},c.body),
+          h('div',{className:'msg-act'},h('button',{title:'Copy',onClick:()=>this.toast('Copied to clipboard')},'⧉'),h('button',{title:'Helpful',onClick:()=>this.toast('Thanks for the feedback')},'👍'),h('button',{title:'Not helpful',onClick:()=>this.toast('Thanks — I will improve')},'👎')))); });
+    return h('div',{className:'wrap fade',style:{height:'calc(100vh - 58px)',maxWidth:'1180px',display:'flex',flexDirection:'column',paddingBottom:'24px'}},
+      h('div',{className:'chat-wrap'},
+        h('div',{className:'chat-main'},
+          h('div',{className:'chat-head'},h('div',{style:{display:'flex',alignItems:'center',gap:'10px'}},h('div',{className:'mav',style:{width:'34px',height:'34px',background:'var(--navy)',borderRadius:'9px',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700}},'✦'),
+            h('div',{},h('div',{style:{fontWeight:700,fontSize:'14.5px'}},'ALK Atlas Assistant'),h('div',{style:{fontSize:'11.5px',color:'#16A34A',display:'flex',alignItems:'center',gap:'5px'}},h('span',{className:'dot'}),'Connected to unified database'))),
+            h('button',{className:'btn btn-o btn-sm',onClick:()=>this.clearChat()},'Clear conversation')),
+          h('div',{className:'chat-body',ref:el=>this._chatBody=el},msgs,
+            this.state.chatTyping?h('div',{className:'msg b'},h('div',{className:'mav',style:{background:'var(--navy)'}},'✦'),h('div',{className:'typing'},h('i'),h('i'),h('i'))):null,
+            this.state.chatTyping?h('div',{className:'sub',style:{fontSize:'12px',marginLeft:'44px',marginTop:'-8px'}},'Searching database…'):null),
+          h('div',{className:'chat-in'},h('textarea',{className:'input',rows:1,style:{resize:'none',minHeight:'42px'},placeholder:'Ask about experiments, results, samples, files…',value:this.state.chatInput,onChange:e=>this.setState({chatInput:e.target.value}),onKeyDown:e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();this.sendChat(this.state.chatInput);}}}),
+            h('button',{className:'btn btn-p',style:{height:'42px'},onClick:()=>this.sendChat(this.state.chatInput)},'Send'))),
+        h('div',{className:'sugg'},h('div',{style:{fontWeight:700,fontSize:'14px'}},'Suggested questions'),h('div',{className:'sub',style:{fontSize:'12px',marginTop:'2px'}},'Tap to ask the assistant'),
+          this.state.suggested.map((q,i)=>h('div',{key:i,className:'sugg-q',onClick:()=>this.sendChat(q)},q)))));
+  }
+  clearChat(){ this.setState({chat:[{role:'b',q:'__intro'}],suggested:this.defaultSuggest()}); this.toast('Conversation cleared'); }
+  sendChat(text){ text=(text||'').trim(); if(!text||this.state.chatTyping) return;
+    this.setState(s=>({chat:[...s.chat,{role:'u',text}],chatInput:'',chatTyping:true}));
+    setTimeout(()=>{ this.setState(s=>({chat:[...s.chat,{role:'b',q:text}],chatTyping:false,suggested:this.followups(text)}));
+      setTimeout(()=>{ if(this._chatBody) this._chatBody.scrollTop=this._chatBody.scrollHeight; },30);
+    },1000);
+    setTimeout(()=>{ if(this._chatBody) this._chatBody.scrollTop=this._chatBody.scrollHeight; },40);
+  }
+  recLink(id){ const h=React.createElement; return h('span',{className:'rec-link',onClick:()=>this.openRecord(id)},'→ '+id); }
+  botRecCard(r){ const h=React.createElement; return h('div',{key:r.id,className:'botrec',onClick:()=>this.openRecord(r.id)},
+    h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'8px'}},h('span',{style:{fontWeight:600,fontSize:'13px'}},r.title),this.badge(r.status)),
+    h('div',{style:{display:'flex',gap:'8px',alignItems:'center',marginTop:'5px'}},this.tyBadge(r.type),h('span',{className:'mono',style:{fontSize:'11px',color:'var(--teal)'}},r.id),h('span',{className:'sub',style:{fontSize:'11.5px'}},r.researcher))); }
+  botContent(q){ const h=React.createElement; const recs=this.state.records; const u=this.state.user;
+    if(q==='__intro') return {body:h('div',{},'Hi '+u.first+", I'm your ALK Atlas Assistant. I can find experiments, summarise results, compare studies, and help you locate files across the entire database. What are you looking for today? You can also press the Talk button to ask me out loud.")};
+    const s=q.toLowerCase();
+    const wrap=(text,list)=>h('div',{},h('div',null,text),list&&list.length?h('div',{className:'botlist'},list.map(r=>this.botRecCard(r))):null);
+    const find=id=>recs.find(r=>r.id===id);
+    if(s.includes('a-12')||s.includes('sample a')) { const rs=recs.filter(r=>r.sample==='A-12');
+      return {body:h('div',{},h('div',null,'I found ',h('b',null,rs.length+' experiments'),' using sample A-12. The most recent is ',this.recLink('EXP-2026-041'),' (EML4-ALK fusion variant screening, PCR, M. Larsen, Approved). The earlier one is ',this.recLink('EXP-2026-029'),' (Sample characterisation, R. Bianchi). Would you like a summary of either?'),h('div',{className:'botlist'},rs.map(r=>this.botRecCard(r))))}; }
+    if(s.includes('slit')||s.includes('sublingual')) { const rs=recs.filter(r=>(r.tags||[]).some(t=>/slit/i.test(t))||/slit/i.test(r.title)||/sublingual/i.test(r.title));
+      return {body:wrap(h('span',null,h('b',null,rs.length+' records'),' mention SLIT immunotherapy. The most cited is ',this.recLink('EXP-2026-033'),' (SLIT dose-response assay, Wet-lab, L. Hoffmann, Approved). Do you want me to pull the result summary?'),rs)}; }
+    if(s.includes('wet-lab')||s.includes('wet lab')||s.includes('wetlab')) { const rs=recs.filter(r=>r.type==='wetlab');
+      return {body:wrap('Here are all '+rs.length+' wet-lab records. They cover SLIT dose-response, IgE quantification and crizotinib resistance work:',rs)}; }
+    if(s.includes('clinical')||s.includes('trial')||s.includes('cohort')) { const rs=recs.filter(r=>r.type==='clinical');
+      return {body:h('div',{},h('div',null,'There are '+rs.length+' clinical-trial records. The ',h('b',null,'Lorlatinib Phase II cohort'),' (',this.recLink('EXP-2026-037'),') is currently under review with a promising 64% interim ORR. Here is the full set:'),h('div',{className:'botlist'},rs.map(r=>this.botRecCard(r))))}; }
+    if(s.includes('latest')||s.includes('recent')||s.includes('new')) { const rs=[...recs].sort((a,b)=>b.date<a.date?-1:1).slice(0,3);
+      return {body:wrap('The 3 most recently uploaded records are:',rs)}; }
+    if(s.includes('approved')) { const rs=recs.filter(r=>r.status==='Approved');
+      return {body:wrap('There are '+rs.length+' approved records in the database:',rs)}; }
+    if(s.includes('pending')||s.includes('under review')||s.includes('review')) { const rs=recs.filter(r=>r.status==='Under Review');
+      return {body:h('div',{},h('div',null,rs.length+' records are under review. '+(rs.map(r=>r.reviewerId?this.USERS()[r.reviewerId].short:'a reviewer').filter((v,i,a)=>a.indexOf(v)===i).join(' and '))+' need to act:'),h('div',{className:'botlist'},rs.map(r=>this.botRecCard(r))))}; }
+    if(s.includes('compare')) { const wl=recs.filter(r=>r.type==='wetlab').slice(0,2);
+      return {body:h('div',{},h('div',null,'Side-by-side comparison of the two most recent wet-lab records:'),
+        h('table',{className:'tbl',style:{marginTop:'10px',fontSize:'12.5px',border:'1px solid var(--line)',borderRadius:'8px'}},
+          h('tbody',null,[['Record',wl.map(r=>r.id)],['Title',wl.map(r=>r.title)],['Researcher',wl.map(r=>r.researcher)],['Protocol',wl.map(r=>r.meta[0][1])],['Status',wl.map(r=>r.status)]].map((row,i)=>
+            h('tr',{key:i},h('td',{style:{fontWeight:600,color:'var(--mut)'}},row[0]),row[1].map((c,j)=>h('td',{key:j},c)))))))}; }
+    if(s.includes('file')||s.includes('download')||s.includes('attach')) { const rs=recs.filter(r=>r.files.length).sort((a,b)=>b.files.length-a.files.length).slice(0,5);
+      return {body:wrap('These records have the most attached files:',rs)}; }
+    const names=[['hoffmann','L. Hoffmann'],['ng','S. Ng'],['larsen','M. Larsen'],['bianchi','R. Bianchi'],['dam','M. Dam']];
+    for(const [kw,short] of names){ if(s.includes(kw)){ const rs=recs.filter(r=>r.researcher===short);
+      return {body:wrap('Found '+rs.length+' records uploaded by '+short+':',rs)}; } }
+    if(s.includes('help')||s.includes('what can you')) return {body:h('div',{},h('div',{style:{marginBottom:'8px'}},'I can search and reason over the entire unified database. Try asking:'),
+      h('div',{className:'botlist'},['Find experiments using sample A-12','Summarise SLIT immunotherapy studies','Which records are under review?','Compare the two latest wet-lab experiments','List records by R. Bianchi','Which records have attached files?'].map((ex,i)=>h('div',{key:i,className:'botrec',onClick:()=>this.sendChat(ex)},'💬  '+ex))))};
+    // fallback
+    const rs=recs.slice(0,3);
+    return {body:wrap('I searched the database and found '+recs.length+' potentially relevant records. Here are the closest matches:',rs)};
+  }
+  followups(q){ const s=q.toLowerCase();
+    if(s.includes('slit')) return ['Pull the result summary for EXP-2026-033','Compare SCIT vs SLIT efficacy','Which SLIT records are approved?','Who reviewed the SLIT studies?','Show IgE quantification data'];
+    if(s.includes('clinical')||s.includes('trial')) return ['Summarise the Lorlatinib interim results','Show adverse events for Phl p 5','Which trials are Phase III?','Who needs to approve EXP-2026-037?','List rejected clinical records'];
+    if(s.includes('a-12')||s.includes('sample')) return ['Summarise EXP-2026-041','Summarise EXP-2026-029','What other samples are characterised?','Show PCR results for sample A-12','Find files for these records'];
+    if(s.includes('wet')) return ['Compare the two latest wet-lab experiments','Which wet-lab records are approved?','Show the crizotinib resistance data','List ELISA protocols','Who uploaded these?'];
+    if(s.includes('help')||s.includes('what can')) return this.defaultSuggest();
+    return ['Show me the latest experiments','Which records are under review?','List all approved records','Compare two recent experiments','Which records have files?'];
+  }
+
+  // ===== ADMIN =====
+  admin(){ const h=React.createElement; if(this.state.user.id!=='it') return this.emptyState('Admin access only','This panel is restricted to IT / Data Engineers.');
+    const tab=this.state.params.tab||this.state.adminTab;
+    const setTab=(t)=>this.setState(s=>({adminTab:t,params:{...s.params,tab:t}}));
+    return h('div',{className:'wrap fade'},
+      h('div',{className:'h1',style:{marginBottom:'4px'}},'Admin panel'),
+      h('div',{className:'sub',style:{marginBottom:'18px'}},'Platform administration — users, audit and data export.'),
+      h('div',{className:'tabs',style:{marginBottom:'20px'}},[['users','Users'],['audit','Audit log'],['export','Data export']].map(([k,l])=>h('button',{key:k,className:'tab'+(tab===k?' on':''),onClick:()=>setTab(k)},l))),
+      tab==='users'?this.adminUsers():tab==='audit'?this.adminAudit():this.adminExport());
+  }
+  adminUsers(){ const h=React.createElement; const recs=this.state.records;
+    const last={scientist:'2 min ago',coordinator:'1 hour ago',management:'Yesterday',it:'Online now'};
+    return h('div',{className:'card',style:{overflow:'hidden'}},h('div',{style:{overflowX:'auto'}},h('table',{className:'tbl'},
+      h('thead',null,h('tr',null,['User','Role','Last active','Records uploaded',''].map((c,i)=>h('th',{key:i},c)))),
+      h('tbody',null,Object.values(this.USERS()).map(x=>h('tr',{key:x.id},
+        h('td',null,h('div',{style:{display:'flex',alignItems:'center',gap:'10px'}},h('div',{className:'av',style:{background:x.color,width:'32px',height:'32px',fontSize:'11px'}},x.initials),h('span',{style:{fontWeight:600}},x.name))),
+        h('td',null,x.role),h('td',null,h('span',{style:{color:x.id==='it'?'#16A34A':'var(--mut)'}},last[x.id])),
+        h('td',null,recs.filter(r=>r.researcher===x.short).length),
+        h('td',null,h('button',{className:'btn btn-o btn-sm',onClick:()=>this.toast('Editing role for '+x.short+' (demo)')},'Edit role'))))))));
+  }
+  adminAudit(){ const h=React.createElement;
+    return h('div',{className:'card',style:{overflow:'hidden'}},h('div',{style:{overflowX:'auto'}},h('table',{className:'tbl'},
+      h('thead',null,h('tr',null,['Timestamp','User','Action','Record'].map((c,i)=>h('th',{key:i},c)))),
+      h('tbody',null,this.state.audit.map((a,i)=>h('tr',{key:i},
+        h('td',null,h('span',{className:'mono',style:{fontSize:'12px',color:'var(--mut)'}},a.time)),
+        h('td',null,h('span',{style:{fontWeight:600}},a.user)),h('td',null,a.action),
+        h('td',null,a.rec==='—'?h('span',{className:'sub'},'—'):h('span',{className:'rec-link',onClick:()=>this.openRecord(a.rec)},a.rec))))))));
+  }
+  adminExport(){ const h=React.createElement;
+    return h('div',{style:{maxWidth:'560px'}},
+      h('div',{className:'card',style:{padding:'26px'}},
+        h('div',{className:'h2'},'Export full database'),
+        h('div',{className:'sub',style:{marginTop:'4px',marginBottom:'18px'}},this.state.records.length+' records · all template types · includes metadata and review history.'),
+        h('div',{style:{display:'flex',gap:'12px'}},
+          h('button',{className:'btn btn-p',onClick:()=>{this.toast('Database exported as CSV');this.setState(s=>({audit:[{time:this.nowStamp(),user:s.user.short,action:'Exported database (CSV)',rec:'—'},...s.audit]}));}},'⬇ Export CSV'),
+          h('button',{className:'btn btn-d',onClick:()=>{this.toast('Database exported as JSON');this.setState(s=>({audit:[{time:this.nowStamp(),user:s.user.short,action:'Exported database (JSON)',rec:'—'},...s.audit]}));}},'⬇ Export JSON'))),
+      h('div',{className:'card',style:{padding:'26px',marginTop:'16px'}},
+        h('div',{className:'h2'},'Scheduled exports'),
+        h('div',{className:'sub',style:{marginTop:'4px',marginBottom:'14px'}},'Automated nightly backup to the secure data warehouse.'),
+        h('div',{style:{display:'flex',alignItems:'center',gap:'10px',fontSize:'13.5px'}},h('span',{className:'dot'}),'Nightly export active — last run 02:00 CET')));
+  }
+
+  // ===== BARCODE + PRINT =====
+  barcodeBars(text){ let seed=2166136261>>>0; for(let i=0;i<text.length;i++){ seed^=text.charCodeAt(i); seed=Math.imul(seed,16777619)>>>0; }
+    let x=seed||12345; const rnd=()=>{ x=(Math.imul(x,1103515245)+12345)>>>0; return x; };
+    const bars=[{w:3,b:1},{w:2,b:0},{w:2,b:1},{w:2,b:0}];
+    for(let i=0;i<38;i++){ bars.push({w:1+(rnd()%4),b:1}); bars.push({w:1+(rnd()%3),b:0}); }
+    bars.push({w:2,b:0},{w:2,b:1},{w:2,b:0},{w:3,b:1});
+    return bars; }
+  barcodeEl(text,sm){ const h=React.createElement; return h('div',{className:'bc'+(sm?' sm':'')}, this.barcodeBars(text).map((b,i)=>h('i',{key:i,style:{width:(b.w*1.6)+'px',background:b.b?'#111':'#fff'}}))); }
+  tagEl(r){ const h=React.createElement; return h('div',{className:'tag'},
+    h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'8px'}},h('span',{style:{fontWeight:700,fontSize:'12px',letterSpacing:'1px'}},'ALK ATLAS'),h('span',{style:{fontSize:'9.5px',color:'#555',textTransform:'uppercase',letterSpacing:'.5px'}},this.TYPES()[r.type])),
+    h('div',{style:{fontFamily:"'Public Sans',sans-serif",fontWeight:600,fontSize:'11.5px',lineHeight:1.3,height:'30px',overflow:'hidden',marginBottom:'8px'}},r.title),
+    this.barcodeEl(r.id),
+    h('div',{style:{textAlign:'center',letterSpacing:'4px',fontSize:'14px',fontWeight:600,marginTop:'5px'}},r.id),
+    h('div',{style:{display:'flex',justifyContent:'space-between',fontSize:'9.5px',color:'#555',marginTop:'9px',borderTop:'1px dashed #bbb',paddingTop:'7px'}},h('span',null,'Sample '+(r.sample||'—')),h('span',null,r.researcher),h('span',null,this.fmt(r.date)))); }
+  openPrint(ids){ this.setState({printTags:ids,userMenu:false,mobileOpen:false}); }
+  doPrint(){ setTimeout(()=>{ try{window.print();}catch(e){} },60); }
+  printOverlay(){ const h=React.createElement; const ids=this.state.printTags; if(!ids) return null;
+    const recs=ids.map(id=>this.rec(id)).filter(Boolean);
+    return h('div',{className:'printroot'},
+      h('div',{className:'noprint',style:{width:'100%',maxWidth:'860px',display:'flex',gap:'10px',marginBottom:'14px',alignItems:'center'}},
+        h('div',{style:{color:'#fff',fontWeight:600,marginRight:'auto',fontSize:'14px'}}, recs.length+' barcode tag'+(recs.length>1?'s':'')+' ready to print'),
+        h('button',{className:'btn btn-o',onClick:()=>this.setState({printTags:null})},'Close'),
+        h('button',{className:'btn btn-p',onClick:()=>this.doPrint()},'🖨  Print')),
+      h('div',{className:'printsheet printarea'}, h('div',{className:'taggrid'}, recs.map(r=>h('div',{key:r.id},this.tagEl(r))))));
+  }
+  // ===== VOICE ASSISTANT =====
+  speak(text){ try{ if(!window.speechSynthesis) return; const u=new SpeechSynthesisUtterance(text.replace(/EXP-2026-0*(\d+)/g,'experiment $1')); u.rate=1.03; u.pitch=1; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }catch(e){} }
+  voiceSamples(){ return ['Show me experiments using sample A-12','Which records are under review?','Summarise the SLIT immunotherapy studies','What was uploaded most recently?','How many records are approved?']; }
+  voiceAnswer(q){ const s=q.toLowerCase(); const recs=this.state.records;
+    if(s.includes('a-12')){ const rs=recs.filter(r=>r.sample==='A-12'); return 'I found '+rs.length+' experiments using sample A-12. The most recent is '+rs[0].id+', '+rs[0].title+', by '+rs[0].researcher+', and it is approved.'; }
+    if(s.includes('slit')){ return '3 records mention SLIT immunotherapy. The most cited is the SLIT dose-response assay, EXP-2026-033, a wet-lab study by L. Hoffmann, which is approved.'; }
+    if(s.includes('review')||s.includes('pending')){ const n=recs.filter(r=>r.status==='Under Review').length; return n+' records are currently under review and waiting for sign-off, including the Lorlatinib Phase 2 cohort interim analysis.'; }
+    if(s.includes('recent')||s.includes('latest')||s.includes('upload')){ const r=recs[0]; return 'The most recent upload is '+r.id+', '+r.title+', by '+r.researcher+'.'; }
+    if(s.includes('approved')){ const n=recs.filter(r=>r.status==='Approved').length; return n+' records are approved in the database.'; }
+    return 'I searched the unified database and found '+recs.length+' records. Open the chat assistant to see the full list.'; }
+  openVoice(){ const samples=this.voiceSamples(); const q=samples[Math.floor(Math.random()*samples.length)];
+    this.setState({voice:{phase:'listening',query:'',full:q,answer:''}});
+    let i=0; clearInterval(this._vt); this._vt=setInterval(()=>{ i+=2; this.setState(s=>s.voice?{voice:{...s.voice,query:q.slice(0,i)}}:{}); if(i>=q.length) clearInterval(this._vt); },42);
+    clearTimeout(this._v1); clearTimeout(this._v2);
+    this._v1=setTimeout(()=>this.setState(s=>s.voice?{voice:{...s.voice,phase:'thinking',query:q}}:{}),1750);
+    this._v2=setTimeout(()=>{ const ans=this.voiceAnswer(q); this.setState(s=>s.voice?{voice:{...s.voice,phase:'answer',answer:ans}}:{}); this.speak(ans); },2950);
+  }
+  closeVoice(){ clearInterval(this._vt); clearTimeout(this._v1); clearTimeout(this._v2); try{window.speechSynthesis&&window.speechSynthesis.cancel();}catch(e){} this.setState({voice:null}); }
+  fab(){ const h=React.createElement; if(this.state.voice) return null; return h('button',{className:'fab',onClick:()=>this.openVoice()},h('span',{className:'mic'},'🎙'),'Talk to lab assistant'); }
+  voiceOverlay(){ const h=React.createElement; const v=this.state.voice; if(!v) return null;
+    const status=v.phase==='listening'?'Listening…':v.phase==='thinking'?'Searching the database…':'ALK Atlas Assistant';
+    return h('div',{className:'ov',onClick:()=>this.closeVoice()},
+      h('div',{className:'modal',style:{width:'440px',textAlign:'center'},onClick:e=>e.stopPropagation()},
+        h('div',{style:{padding:'30px 26px 24px'}},
+          h('div',{className:'vmic'+(v.phase==='listening'?'':' idle')}, v.phase==='answer'?'✦':'🎙'),
+          h('div',{style:{fontWeight:700,fontSize:'15px',marginTop:'20px',color:v.phase==='listening'?'var(--teal-d)':'var(--ink)'}},status),
+          v.phase==='thinking'?h('div',{className:'vwave',style:{marginTop:'14px'}},[0,1,2,3,4].map(i=>h('i',{key:i}))):null,
+          (v.query)?h('div',{style:{marginTop:'16px',fontSize:'16px',fontWeight:600,color:'var(--navy)',lineHeight:1.4}},'“'+v.query+(v.phase==='listening'?'':'”')+(v.phase==='listening'?'':'')) :null,
+          v.phase==='answer'?h('div',{style:{marginTop:'14px',padding:'14px 16px',background:'var(--grey)',borderRadius:'12px',fontSize:'14px',lineHeight:1.6,textAlign:'left',color:'#39415a'}},
+            h('div',{style:{display:'flex',alignItems:'center',gap:'7px',marginBottom:'8px',color:'var(--teal-d)',fontWeight:600,fontSize:'12px'}},h('div',{className:'vwave',style:{height:'16px'}},[0,1,2].map(i=>h('i',{key:i,style:{height:'10px'}}))),'Speaking'),
+            v.answer):null),
+        v.phase==='answer'?h('div',{className:'modal-f'},
+          h('button',{className:'btn btn-o',onClick:()=>this.openVoice()},'Ask again'),
+          h('button',{className:'btn btn-o',onClick:()=>{ const q=v.full; this.closeVoice(); this.nav('chatbot'); this.sendChat(q); }},'Open in chatbot'),
+          h('button',{className:'btn btn-p',onClick:()=>this.closeVoice()},'Done')):
+          h('div',{className:'modal-f'},h('button',{className:'btn btn-o',onClick:()=>this.closeVoice()},'Cancel'))));
+  }
+
+  // ===== shared =====
+  emptyState(title,sub){ const h=React.createElement; return h('div',{className:'wrap'},h('div',{className:'empty',style:{paddingTop:'70px'}},
+    h('div',{className:'eic'},'∅'),h('div',{style:{fontWeight:700,fontSize:'16px',color:'var(--ink)'}},title),h('div',{style:{fontSize:'13.5px',marginTop:'5px'}},sub))); }
+  toastStack(){ const h=React.createElement; return h('div',{className:'toasts'},this.state.toasts.map(t=>h('div',{key:t.id,className:'toast'},h('div',{className:'ti'},'✓'),t.msg))); }
+}
+</script>
+</body>
+</html>
